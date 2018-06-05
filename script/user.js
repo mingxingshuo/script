@@ -95,7 +95,7 @@ function get_nickname() {
 }
 
 function update_nickname(_id, code, next) {
-    // console.log(code,'-------------code')
+    console.log(code,'-------------code')
     UserModel.fetch_nickname(_id, code, function (error, users) {
         // console.log(users, '-------------------nicknames')
         var user_arr = [];
