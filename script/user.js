@@ -163,18 +163,20 @@ function update_nickname(_id, code, next) {
 // console.log('更新用户昵称头像信息');
 // get_nickname();
 
-var rule = new schedule.RecurrenceRule();
-var times = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56];
-rule.minute = times;
-var j = schedule.scheduleJob(rule, function () {
+var rule_nickname = new schedule.RecurrenceRule();
+// var times_nickname = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56];
+// rule_nickname.minute = times_nickname;
+var times_nickname = [19];
+rule_nickname.hour = times_nickname;
+var j = schedule.scheduleJob(rule_nickname, function () {
     console.log('更新用户昵称头像信息');
     get_nickname();
 });
 
-var rule_nickname = new schedule.RecurrenceRule();
-var times_nickname = [23];
-rule_nickname.hour = times_nickname;
-var j = schedule.scheduleJob(rule_nickname, function () {
+var rule = new schedule.RecurrenceRule();
+var times = [23];
+rule.hour = times;
+var j = schedule.scheduleJob(rule, function () {
     console.log('更新用户信息');
     get_user();
 });
