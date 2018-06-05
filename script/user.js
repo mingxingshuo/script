@@ -30,7 +30,7 @@ function update_user(_id, code, next) {
         } else if (user_arr.length == 1) {
             getClient.getClient(code).getUser(user_arr[0], function (err, data) {
                 if (err) {
-                    console.log(err, '----------------err')
+                    console.log(err, '----------------nickname err1')
                 }
                 UserModel.findOneAndUpdate({openid: data.openid}, {
                     nickname: data.nickname,
@@ -45,24 +45,36 @@ function update_user(_id, code, next) {
         } else {
             getClient.getClient(code).batchGetUsers(user_arr, function (err, data) {
                 if (err) {
-                    console.log(err, '----------------err')
+                    console.log(err, '----------------nickname err2')
+                    if (users.length == 50) {
+                        return next(users[49]._id, code);
+                    } else {
+                        return next(null, (parseInt(code) + 1).toString())
+                    }
                 }
                 if (data && data.user_info_list) {
-                    data.user_info_list.forEach(function (info) {
-                        UserModel.findOneAndUpdate({openid: info.openid}, {
-                            nickname: info.nickname,
-                            headimgurl: info.headimgurl
-                        }, function (err, result) {
-                            if (err) {
-                                console.log(err)
-                            }
-                        });
+                    async.eachLimit(data.user_info_list,10,function (info,callback) {
+                        if(info.nickname){
+                            UserModel.findOneAndUpdate({openid: info.openid}, {
+                                nickname: info.nickname,
+                                headimgurl: info.headimgurl
+                            }, function (err, result) {
+                                if (err) {
+                                    console.log(err)
+                                }
+                            });
+                        }
+                        callback(null)
+                    },function (error, result){
+                        if(error){
+                            console.log(error,'--------------error')
+                        }
+                        if (users.length == 50) {
+                            return next(users[49]._id, code);
+                        } else {
+                            return next(null, (parseInt(code) + 1).toString())
+                        }
                     })
-                }
-                if (users.length == 50) {
-                    return next(users[49]._id, code);
-                } else {
-                    return next(null, (parseInt(code) + 1).toString())
                 }
             })
         }
@@ -83,7 +95,7 @@ function get_nickname() {
 }
 
 function update_nickname(_id, code, next) {
-    console.log(code,'-------------code')
+    // console.log(code,'-------------code')
     UserModel.fetch_nickname(_id, code, function (error, users) {
         // console.log(users, '-------------------nicknames')
         var user_arr = [];
@@ -112,6 +124,11 @@ function update_nickname(_id, code, next) {
             getClient.getClient(code).batchGetUsers(user_arr, function (err, data) {
                 if (err) {
                     console.log(err, '----------------nickname err2')
+                    if (users.length == 50) {
+                        return next(users[49]._id, code);
+                    } else {
+                        return next(null, (parseInt(code) + 1).toString())
+                    }
                 }
                 if (data && data.user_info_list) {
                     async.eachLimit(data.user_info_list,10,function (info,callback) {
@@ -136,12 +153,6 @@ function update_nickname(_id, code, next) {
                             return next(null, (parseInt(code) + 1).toString())
                         }
                     })
-                }else{
-                    if (users.length == 50) {
-                        return next(users[49]._id, code);
-                    } else {
-                        return next(null, (parseInt(code) + 1).toString())
-                    }
                 }
             })
         }
@@ -149,8 +160,8 @@ function update_nickname(_id, code, next) {
     })
 }
 
-console.log('更新用户昵称头像信息');
-get_nickname();
+// console.log('更新用户昵称头像信息');
+// get_nickname();
 
 var rule = new schedule.RecurrenceRule();
 var times = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56];
