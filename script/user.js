@@ -136,22 +136,13 @@ function update_nickname(_id, code, next) {
                             return next(null, (parseInt(code) + 1).toString())
                         }
                     })
-                    // data.user_info_list.forEach(function (info) {
-                    //     UserModel.findOneAndUpdate({openid: info.openid}, {
-                    //         nickname: info.nickname,
-                    //         headimgurl: info.headimgurl
-                    //     }, function (err, result) {
-                    //         if (err) {
-                    //             console.log(err)
-                    //         }
-                    //     });
-                    // })
+                }else{
+                    if (users.length == 50) {
+                        return next(users[49]._id, code);
+                    } else {
+                        return next(null, (parseInt(code) + 1).toString())
+                    }
                 }
-                // if (users.length == 50) {
-                //     return next(users[49]._id, code);
-                // } else {
-                //     return next(null, (parseInt(code) + 1).toString())
-                // }
             })
         }
 
