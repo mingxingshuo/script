@@ -7,7 +7,7 @@ function getClient(code) {
 	var config=weichat_conf[code];
 	var api = new WechatAPI(config.appid, config.appsecret,
 		function getToken(callback){
-			console.log('----- getToken ----')
+			// console.log('----- getToken ----')
 			memcached.get('access_token'+code,function(err,token){
 				console.log(token)
 				if(token){
@@ -15,11 +15,10 @@ function getClient(code) {
 				}else{
 					callback(null,null);
 				}
-
 			});
 		},
 		function saveToken(token,callback){
-			console.log('----- saveToken ----')
+			// console.log('----- saveToken ----')
 			memcached.set('access_token'+code,JSON.stringify(token),5*60,callback)
 		});
 	return api;
