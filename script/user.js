@@ -96,7 +96,7 @@ function update_nickname(_id, code, next) {
         } else if (user_arr.length == 1) {
             getClient.getClient(code).getUser(user_arr[0], function (err, data) {
                 if (err) {
-                    console.log(err, '----------------nickname err')
+                    console.log(err, '----------------nickname err1')
                 }
                 UserModel.findOneAndUpdate({openid: data.openid}, {
                     nickname: data.nickname,
@@ -111,11 +111,10 @@ function update_nickname(_id, code, next) {
         } else {
             getClient.getClient(code).batchGetUsers(user_arr, function (err, data) {
                 if (err) {
-                    console.log(err, '----------------nickname err')
+                    console.log(err, '----------------nickname err2')
                 }
                 if (data && data.user_info_list) {
                     async.eachLimit(data.user_info_list,10,function (info,callback) {
-                        console.log(info,'----------------info')
                         if(info.nickname){
                             UserModel.findOneAndUpdate({openid: info.openid}, {
                                 nickname: info.nickname,
