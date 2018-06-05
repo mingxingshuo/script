@@ -9,7 +9,7 @@ function getClient(code) {
 		function getToken(callback){
 			// console.log('----- getToken ----')
 			memcached.get('access_token'+code,function(err,token){
-				console.log(token)
+				// console.log(token)
 				if(token){
 					callback(null,JSON.parse(token));
 				}else{
