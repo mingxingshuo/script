@@ -1,18 +1,19 @@
-var WechatAPI = require('wechat-api');
-var weichat_conf = require('../conf/weichat.json');
+// var WechatAPI = require('wechat-api');
+// var weichat_conf = require('../conf/weichat.json');
 var schedule = require("node-schedule");
 var pro_conf = require('../conf/proj.json');
 var UserModel = require('../model/User.js');
 var UserWaitMessageModel = require('../model/UserWaitMessage.js');
 var async = require('async');
 var send_codes = require('../conf/proj.json').send_wechat;
-var clients = {}
+var getClient = require('../util/get_weichat_client');
+// var clients = {}
 
-send_codes.forEach(function (item) {
-    var config = weichat_conf[item]
-    var client = new WechatAPI(config.appid, config.appsecret);
-    clients[item] = client
-})
+// send_codes.forEach(function (item) {
+//     var config = weichat_conf[item]
+//     var client = new WechatAPI(config.appid, config.appsecret);
+//     clients[item] = client
+// })
 
 
 function next_up(_id) {
@@ -84,7 +85,7 @@ function send_message(_id, next) {
         users.forEach(function (user) {
 
             if (user.status == user.user_status && strs[user.status]) {
-                clients[user.code].sendText(user.openid, strs[user.status], function (err, result) {
+                getClient.getClient(user.code).sendText(user.openid, strs[user.status], function (err, result) {
                     if(err){
                         console.log(err);
                     }else{
@@ -93,7 +94,7 @@ function send_message(_id, next) {
                 });
             }
             if (user.status != user.user_status && strs[user.status] && (new Date().getTime() - user.updateAt.getTime()) > 2 * 3600 * 1000) {
-                clients[user.code].sendText(user.openid, strs[user.status], function (err, result) {
+                getClient.getClient(user.code).sendText(user.openid, strs[user.status], function (err, result) {
                     if(err){
                         console.log(err);
                     }else{

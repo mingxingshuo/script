@@ -4,10 +4,11 @@ var TaobaoOrderModel = require('../model/TaobaoOrder.js');
 var UserModel = require('../model/User.js');
 var AddFreeOrderModel = require('../model/AddFreeOrder.js');
 
-var WechatAPI = require('wechat-api');
-var weichat_conf = require('../conf/weichat.json');
-var weichat_apis = {};
+// var WechatAPI = require('wechat-api');
+// var weichat_conf = require('../conf/weichat.json');
+// var weichat_apis = {};
 var async = require('async');
+var getClient = require('../util/get_weichat_client');
 
 function next_up(_id) {
     if (_id) {
@@ -38,11 +39,12 @@ function update_order(_id, next) {
                                 if (!user) {
                                     console.log('no order user')
                                 } else {
-                                    if (!weichat_apis[user.code]) {
-                                        var config = weichat_conf[user.code];
-                                        weichat_apis[user.code] = new WechatAPI(config.appid, config.appsecret);
-                                    }
-                                    var client = weichat_apis[user.code];
+                                    // if (!weichat_apis[user.code]) {
+                                    //     var config = weichat_conf[user.code];
+                                    //     weichat_apis[user.code] = new WechatAPI(config.appid, config.appsecret);
+                                    // }
+                                    // var client = weichat_apis[user.code];
+                                    var client = getClient.getClient(user.code);
                                     callback(null, user, client)
                                 }
                             });

@@ -1,20 +1,11 @@
 var schedule = require("node-schedule");
 var UserModel = require('../model/User.js');
-var WechatAPI = require('wechat-api');
+// var WechatAPI = require('wechat-api');
 var weichat_conf = require('../conf/weichat.json');
-var clients = {}
-
-// for (var item in weichat_conf) {
-//     var config = weichat_conf[item]
-//     var client = new WechatAPI(config.appid, config.appsecret);
-//     clients[item] = client
-// }
-var config = weichat_conf['1']
-var client = new WechatAPI(config.appid, config.appsecret);
-clients['1'] = client
+var getClient = require('../util/get_weichat_client');
 
 function next_up(_id, code) {
-    if (code && code <= Object.keys(clients).length) {
+    if (code && code <= Object.keys(weichat_conf).length) {
         return update_user(_id, code, next_up);
     } else {
         console.log('update_user end');
@@ -32,10 +23,10 @@ function update_user(_id, code, next) {
         users.forEach(function (user) {
             user_arr.push(user.openid)
         })
-        if(user_arr.length == 0){
-            console.log(user_arr,'-------------------user null')
-        }else if(user_arr.length ==1){
-            clients[code].getUser(user_arr[0],function (err,data) {
+        if (user_arr.length == 0) {
+            console.log(user_arr, '-------------------user null')
+        } else if (user_arr.length == 1) {
+            getClient.getClient(code).getUser(user_arr[0], function (err, data) {
                 if (err) {
                     console.log(err, '----------------err')
                 }
@@ -48,8 +39,8 @@ function update_user(_id, code, next) {
                     }
                 });
             })
-        }else{
-            clients[code].batchGetUsers(user_arr, function (err, data) {
+        } else {
+            getClient.getClient(code).batchGetUsers(user_arr, function (err, data) {
                 if (err) {
                     console.log(err, '----------------err')
                 }
@@ -65,18 +56,18 @@ function update_user(_id, code, next) {
                         });
                     })
                 }
-                if (users.length == 50) {
-                    return next(users[49]._id, code);
-                } else {
-                    return next(null, code + 1)
-                }
             })
+        }
+        if (users.length == 50) {
+            return next(users[49]._id, code);
+        } else {
+            return next(null, (parseInt(code) + 1).toString())
         }
     })
 }
 
 function next_up_nickname(_id, code) {
-    if (code && code <= Object.keys(clients).length) {
+    if (code && code <= Object.keys(weichat_conf).length) {
         return update_nickname(_id, code, next_up_nickname);
     } else {
         console.log('update_nickname end');
@@ -89,16 +80,17 @@ function get_nickname() {
 }
 
 function update_nickname(_id, code, next) {
+    // console.log(code,'-------------code')
     UserModel.fetch_nickname(_id, code, function (error, users) {
-        console.log(users,'-------------------nicknames')
+        // console.log(users, '-------------------nicknames')
         var user_arr = [];
         users.forEach(function (user) {
             user_arr.push(user.openid)
         })
-        if(user_arr.length == 0){
-            console.log(user_arr,'-------------------nickname null')
-        }else if(user_arr.length ==1){
-            clients[code].getUser(user_arr[0],function (err,data) {
+        if (user_arr.length == 0) {
+            console.log(user_arr, '-------------------nickname null')
+        } else if (user_arr.length == 1) {
+            getClient.getClient(code).getUser(user_arr[0], function (err, data) {
                 if (err) {
                     console.log(err, '----------------nickname err')
                 }
@@ -111,8 +103,8 @@ function update_nickname(_id, code, next) {
                     }
                 });
             })
-        }else {
-            clients[code].batchGetUsers(user_arr, function (err, data) {
+        } else {
+            getClient.getClient(code).batchGetUsers(user_arr, function (err, data) {
                 if (err) {
                     console.log(err, '----------------nickname err')
                 }
@@ -128,18 +120,18 @@ function update_nickname(_id, code, next) {
                         });
                     })
                 }
-                if (users.length == 50) {
-                    return next(users[49]._id, code);
-                } else {
-                    return next(null, code + 1)
-                }
             })
+        }
+        if (users.length == 50) {
+            return next(users[49]._id, code);
+        } else {
+            return next(null, (parseInt(code) + 1).toString())
         }
     })
 }
 
-console.log('更新用户昵称头像信息');
-get_nickname();
+// console.log('更新用户昵称头像信息');
+// get_nickname();
 
 var rule = new schedule.RecurrenceRule();
 var times = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56];
