@@ -166,7 +166,7 @@ function update_nickname(_id, code, next) {
 var rule_nickname = new schedule.RecurrenceRule();
 // var times_nickname = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56];
 // rule_nickname.minute = times_nickname;
-var times_nickname = [19];
+var times_nickname = [11];
 rule_nickname.hour = times_nickname;
 var j = schedule.scheduleJob(rule_nickname, function () {
     console.log('更新用户昵称头像信息');
