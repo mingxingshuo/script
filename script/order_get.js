@@ -65,6 +65,7 @@ function update_order(_id, next) {
                         },
                         function (user, client, callback) {
                             order.status = getOrderStatus(taobao.order_status);
+                            console.log(order.status,'----------------------status')
                             if (order.status == 3) {
                                 AddFreeOrderModel.findOne({order_number: order.order_number}, function (err, addOrder) {
                                     if (!addOrder) {
@@ -158,7 +159,7 @@ function getOrderStatus(status) {
 }
 
 var rule = new schedule.RecurrenceRule();
-var times = [1,2, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56];
+var times = [1, 6, 10,11, 16, 21, 26, 31, 36, 41, 46, 51, 56];
 rule.minute = times;
 var j = schedule.scheduleJob(rule, function () {
     console.log('匹配订单');
