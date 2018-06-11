@@ -159,7 +159,7 @@ function getOrderStatus(status) {
 }
 
 var rule = new schedule.RecurrenceRule();
-var times = [1, 6, 11,13, 16, 21,25, 26, 31, 36, 41, 46, 51, 56];
+var times = [1, 6, 11,13, 16, 21, 26,27, 31, 36, 41, 46, 51, 56];
 rule.minute = times;
 var j = schedule.scheduleJob(rule, function () {
     console.log('匹配订单');
