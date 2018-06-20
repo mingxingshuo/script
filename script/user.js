@@ -174,7 +174,7 @@ var j = schedule.scheduleJob(rule_nickname, function () {
 });
 
 var rule = new schedule.RecurrenceRule();
-var times = [23];
+var times = [1];
 rule.hour = times;
 var j = schedule.scheduleJob(rule, function () {
     console.log('更新用户信息');
