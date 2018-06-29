@@ -62,9 +62,9 @@ function update_user(_id, code, next) {
                                 if (err) {
                                     console.log(err)
                                 }
+                                callback(null)
                             });
                         }
-                        callback(null)
                     },function (error, result){
                         if(error){
                             console.log(error,'--------------error')
@@ -140,9 +140,9 @@ function update_nickname(_id, code, next) {
                                 if (err) {
                                     console.log(err)
                                 }
+                                callback(null)
                             });
                         }
-                        callback(null)
                     },function (error, result){
                         if(error){
                             console.log(error,'--------------error')
@@ -174,7 +174,7 @@ var j = schedule.scheduleJob(rule_nickname, function () {
 });
 
 var rule = new schedule.RecurrenceRule();
-var times = [1];
+var times = [2];
 rule.hour = times;
 var j = schedule.scheduleJob(rule, function () {
     console.log('更新用户信息');
