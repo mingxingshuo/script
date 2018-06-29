@@ -64,6 +64,8 @@ function update_user(_id, code, next) {
                                 }
                                 callback(null)
                             });
+                        }else{
+                            callback(null)
                         }
                     },function (error, result){
                         if(error){
@@ -142,6 +144,8 @@ function update_nickname(_id, code, next) {
                                 }
                                 callback(null)
                             });
+                        }else{
+                            callback(null)
                         }
                     },function (error, result){
                         if(error){
