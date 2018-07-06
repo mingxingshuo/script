@@ -13,6 +13,7 @@ var TaobaoOrderSchema = new Schema({
   order_type : String,
   order_tkCommFee : String,
   goods_tag : String,
+  type:{ type: Number, default:0},
   createAt: {
       type: Date,
       default: Date.now

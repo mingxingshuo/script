@@ -64,7 +64,11 @@ function update_order(_id, next) {
                             }
                         },
                         function (user, client, callback) {
-                            order.status = getOrderStatus(taobao.order_status);
+                            if(!taobao.type){
+                                order.status = getOrderStatus(taobao.order_status);
+                            }else{
+                                order.status = getJingDongStatus(taobao.order_status);
+                            }
                             if (order.status == 3) {
                                 AddFreeOrderModel.findOne({order_number: order.order_number}, function (err, addOrder) {
                                     if (!addOrder) {
@@ -153,6 +157,18 @@ function getOrderStatus(status) {
     } else if (status == '订单成功') {
         return 2;
     } else if (status == '订单结算') {
+        return 3;
+    }
+}
+
+function getJingDongStatus(status) {
+    if (status.indexOf('无效')!=-1) {
+        return -1;
+    } else if (status == '已付款') {
+        return 1;
+    } else if (status == '已完成') {
+        return 2;
+    } else if (status == '已结算') {
         return 3;
     }
 }
