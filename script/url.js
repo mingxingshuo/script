@@ -10,7 +10,7 @@ function get_url() {
                 request.get('http://www.rrdtjj.top/transfer/update_links?domain_name='+url_conf.url, function (err1, response1, data1) {
 
                 })
-                request.get('https://pushbear.ftqq.com/sub?sendkey=5162-6de1c6d9b764985ba73f486a4405dc66&text=老板你的服务器又挂鸟&desp=233333', function (err2, response2, data1) {
+                request.get('https://pushbear.ftqq.com/sub?sendkey=5162-6de1c6d9b764985ba73f486a4405dc66&text='+encodeURIComponent('老板你的服务器又挂鸟')+'&desp=233333', function (err2, response2, data2) {
 
                 })
             }
