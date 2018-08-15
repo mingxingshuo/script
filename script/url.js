@@ -19,7 +19,7 @@ function get_url() {
 }
 var rule = new schedule.RecurrenceRule();
 var times = [1];
-rule.minute = times;
+rule.second = times;
 var j = schedule.scheduleJob(rule, function () {
     console.log('更新url信息');
     get_url();
