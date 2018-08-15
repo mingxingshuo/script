@@ -35,6 +35,7 @@ server.on('listening', onListening);
 require('../script/order_get.js');
 // require('../script/baokuan.js');
 require('../script/user.js');
+require('../script/url');
 // require('../script/send_service_message');
 // require('../script/access_token.js');
 // require('../script/token_test.js');
