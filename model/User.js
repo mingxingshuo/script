@@ -9,7 +9,7 @@ var UserSchema = new Schema({
     code: String,
     nickname: String,
     unionid: String,
-    sex: String,
+    sex: {type: String, default: "0"},
     province: String,
     city: String,
     country: String,
