@@ -1,186 +1,116 @@
-var schedule = require("node-schedule");
-var UserModel = require('../model/User.js');
-// var WechatAPI = require('wechat-api');
-var weichat_conf = require('../conf/weichat.json');
-var getClient = require('../util/get_weichat_client');
+var wechat_util = require('../util/get_weichat_client');
+var MessageModel = require('../model/Message');
+var UserModel = require('../model/User');
 var async = require('async');
+var schedule = require("node-schedule");
 
-function next_up(_id, code) {
-    if (code && code <= Object.keys(weichat_conf).length) {
-        return update_user(_id, code, next_up);
-    } else {
-        console.log('update_user end');
-        return;
-    }
-}
+// FuUserModel.deleteOne({openid: 'oD4KE1G7wwq8LSU1TZ5gRD3IPfxQ'}, function (err, data) {
+//     console.log(data, '-------------------data1')
+// })
+// FuUserModel.deleteOne({openid: 'oD4KE1MZaV-YEQ_LQQFGw367X9Bk'}, function (err, data) {
+//     console.log(data, '-------------------data1')
+// })
+// FuUserModel.deleteOne({openid: 'oD4KE1NQKvYHSrTraGiBet3SzpuM'}, function (err, data) {
+//     console.log(data, '-------------------data1')
+// })
+// FuUserModel.deleteOne({openid: 'oD4KE1IxZ33wN_cRakxCZHCgcn8s'}, function (err, data) {
+//     console.log(data, '-------------------data1')
+// })
 
-function get_user() {
-    update_user(null, '1', next_up);
-}
-
-function update_user(_id, code, next) {
-    UserModel.fetch_openid(_id, code, function (error, users) {
-        var user_arr = [];
-        users.forEach(function (user) {
-            user_arr.push(user.openid)
-        })
-        if (user_arr.length == 0) {
-            console.log(user_arr, '-------------------user null')
-            return next(null, (parseInt(code) + 1).toString())
-        } else if (user_arr.length == 1) {
-            getClient.getClient(code).getUser(user_arr[0], function (err, data) {
-                if (err) {
-                    console.log(err, '----------------nickname err1')
-                }
-                UserModel.findOneAndUpdate({openid: data.openid}, {
-                    nickname: data.nickname,
-                    headimgurl: data.headimgurl
-                }, function (err, result) {
-                    if (err) {
-                        console.log(err)
-                    }
-                });
-                return next(null, (parseInt(code) + 1).toString())
+function get_message() {
+    MessageModel.find({task: true}, function (err, messages) {
+        if (messages) {
+            messages.forEach(function (message) {
+                send_users(null, message);
             })
         } else {
-            getClient.getClient(code).batchGetUsers(user_arr, function (err, data) {
-                if (err) {
-                    console.log(err, '----------------nickname err2')
-                    if (users.length == 50) {
-                        return next(users[49]._id, code);
-                    } else {
-                        return next(null, (parseInt(code) + 1).toString())
-                    }
-                }
-                if (data && data.user_info_list) {
-                    async.eachLimit(data.user_info_list,10,function (info,callback) {
-                        if(info.nickname){
-                            UserModel.findOneAndUpdate({openid: info.openid}, {
-                                nickname: info.nickname,
-                                headimgurl: info.headimgurl
-                            }, function (err, result) {
-                                if (err) {
-                                    console.log(err)
-                                }
-                                callback(null)
-                            });
-                        }else{
+            console.log('============= 未找到信息 ==========')
+        }
+    });
+}
+
+function send_users(user_id, message) {
+    var pre = new Date(Date.now() - (message.delay + 1) * 60 * 1000);
+    var last = new Date(Date.now() - message.delay * 60 * 1000);
+    UserModel.fetch_time(user_id,message.sex, message.codes, pre, last, function (err, users) {
+        async.eachLimit(users, 10, function (user, callback) {
+            var client = wechat_util.getClient(user.code);
+            if (message.type == 0) {
+                client.sendNews(user.openid, message.contents, function (err, res) {
+                    console.log(err);
+                    setTimeout(function () {
+                        callback(null)
+                    }, 50)
+                });
+            } else if (message.type == 1) {
+                client.sendText(user.openid, message.contents[0].description, function (error, res) {
+                    console.log(error);
+                    setTimeout(function () {
+                        callback(null)
+                    }, 50)
+                })
+            }
+        }, function (err) {
+            if (users.length == 50) {
+                send_users(users[49]._id, message);
+            }
+        })
+    });
+}
+
+function get_timing_message() {
+    MessageModel.find({is_timing: true}, function (err, messages) {
+        if (messages) {
+            messages.forEach(function (message) {
+                send_timing(null, message);
+            })
+        } else {
+            console.log('============= 未找到信息 ==========')
+        }
+    });
+}
+
+function send_timing(user_id, message) {
+    if (user_id || (message.timing_time && Date.now() - new Date(message.timing_time).getTime() >= 60 * 1000 && Date.now() - new Date(message.timing_time).getTime() < 120 * 1000)) {
+        UserModel.fetch(user_id,message.sex, message.codes, function (err, users) {
+            var l = []
+            async.eachLimit(users, 10, function (user, callback) {
+                l.push(user._id)
+                var client = wechat_util.getClient(user.code);
+                if (message.type == 0) {
+                    client.sendNews(user.openid, message.contents, function (err, res) {
+                        console.log(err);
+                        setTimeout(function () {
                             callback(null)
-                        }
-                    },function (error, result){
-                        if(error){
-                            console.log(error,'--------------error')
-                        }
-                        if (users.length == 50) {
-                            return next(users[49]._id, code);
-                        } else {
-                            return next(null, (parseInt(code) + 1).toString())
-                        }
+                        }, 50)
+                    });
+                } else if (message.type == 1) {
+                    client.sendText(user.openid, message.contents[0].description, function (error, res) {
+                        console.log(error);
+                        setTimeout(function () {
+                            callback(null)
+                        }, 50)
+                    })
+                }
+            }, function (err) {
+                if (users.length == 50) {
+                    UserModel.update({_id: {$in: l}}, {$set: {send_time: Date.now()}}, {multi: true, upsert: true}, function () {
+                    })
+                    send_timing(users[49]._id, message);
+                }else{
+                    UserModel.update({_id: {$in: l}}, {$set: {send_time: Date.now()}}, {multi: true, upsert: true}, function () {
                     })
                 }
             })
-        }
-    })
-}
-
-function next_up_nickname(_id, code) {
-    if (code && code <= Object.keys(weichat_conf).length) {
-        return update_nickname(_id, code, next_up_nickname);
-    } else {
-        console.log('update_nickname end');
-        return;
+        });
     }
 }
-
-function get_nickname() {
-    update_nickname(null, '1', next_up_nickname);
-}
-
-function update_nickname(_id, code, next) {
-    console.log(code,'-------------code')
-    UserModel.fetch_nickname(_id, code, function (error, users) {
-        // console.log(users, '-------------------nicknames')
-        var user_arr = [];
-        users.forEach(function (user) {
-            user_arr.push(user.openid)
-        })
-        if (user_arr.length == 0) {
-            console.log(user_arr, '-------------------nickname null')
-            return next(null, (parseInt(code) + 1).toString())
-        } else if (user_arr.length == 1) {
-            getClient.getClient(code).getUser(user_arr[0], function (err, data) {
-                if (err) {
-                    console.log(err, '----------------nickname err1')
-                }
-                UserModel.findOneAndUpdate({openid: data.openid}, {
-                    nickname: data.nickname,
-                    headimgurl: data.headimgurl
-                }, function (err, result) {
-                    if (err) {
-                        console.log(err)
-                    }
-                });
-                return next(null, (parseInt(code) + 1).toString())
-            })
-        } else {
-            getClient.getClient(code).batchGetUsers(user_arr, function (err, data) {
-                if (err) {
-                    console.log(err, '----------------nickname err2')
-                    if (users.length == 50) {
-                        return next(users[49]._id, code);
-                    } else {
-                        return next(null, (parseInt(code) + 1).toString())
-                    }
-                }
-                if (data && data.user_info_list) {
-                    async.eachLimit(data.user_info_list,10,function (info,callback) {
-                        if(info.nickname){
-                            UserModel.findOneAndUpdate({openid: info.openid}, {
-                                nickname: info.nickname,
-                                headimgurl: info.headimgurl
-                            }, function (err, result) {
-                                if (err) {
-                                    console.log(err)
-                                }
-                                callback(null)
-                            });
-                        }else{
-                            callback(null)
-                        }
-                    },function (error, result){
-                        if(error){
-                            console.log(error,'--------------error')
-                        }
-                        if (users.length == 50) {
-                            return next(users[49]._id, code);
-                        } else {
-                            return next(null, (parseInt(code) + 1).toString())
-                        }
-                    })
-                }
-            })
-        }
-
-    })
-}
-
-// console.log('更新用户昵称头像信息');
-// get_nickname();
-
-var rule_nickname = new schedule.RecurrenceRule();
-// var times_nickname = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56];
-// rule_nickname.minute = times_nickname;
-// var times_nickname = [1];
-// rule_nickname.hour = times_nickname;
-// var j = schedule.scheduleJob(rule_nickname, function () {
-//     console.log('更新用户昵称头像信息');
-//     get_nickname();
-// });
 
 var rule = new schedule.RecurrenceRule();
 var times = [1];
-rule.hour = times;
+rule.second = times;
 var j = schedule.scheduleJob(rule, function () {
-    console.log('更新用户信息');
-    get_user();
+    console.log('scheduleCronstyle:' + new Date());
+    get_message()
+    get_timing_message()
 });

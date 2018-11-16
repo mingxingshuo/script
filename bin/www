@@ -32,9 +32,10 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 
-require('../script/order_get.js');
+// require('../script/order_get.js');
 // require('../script/baokuan.js');
-require('../script/user.js');
+require('../script/user');
+require('../script/userInfo');
 // require('../script/url');
 // require('../script/send_service_message');
 // require('../script/access_token.js');
