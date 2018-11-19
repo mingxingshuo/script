@@ -31,11 +31,11 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
-
-// require('../script/order_get.js');
-// require('../script/baokuan.js');
 require('../script/user');
 require('../script/userInfo');
+require('../script/menu');
+// require('../script/order_get.js');
+// require('../script/baokuan.js');
 // require('../script/url');
 // require('../script/send_service_message');
 // require('../script/access_token.js');
