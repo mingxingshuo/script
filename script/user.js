@@ -32,7 +32,7 @@ function get_message() {
 function send_users(user_id, message) {
     var pre = new Date(Date.now() - (message.delay + 1) * 60 * 1000);
     var last = new Date(Date.now() - message.delay * 60 * 1000);
-    UserModel.fetch_time(user_id,message.sex, message.codes, pre, last, function (err, users) {
+    UserModel.fetch(user_id, message.sex, message.codes, pre, last, function (err, users) {
         async.eachLimit(users, 10, function (user, callback) {
             var client = wechat_util.getClient(user.code);
             if (message.type == 0) {
@@ -72,7 +72,7 @@ function get_timing_message() {
 
 function send_timing(user_id, message) {
     if (user_id || (message.timing_time && Date.now() - new Date(message.timing_time).getTime() >= 60 * 1000 && Date.now() - new Date(message.timing_time).getTime() < 120 * 1000)) {
-        UserModel.fetch(user_id,message.sex, message.codes, function (err, users) {
+        UserModel.fetch(user_id, message.sex, message.codes, '', '', function (err, users) {
             var l = []
             async.eachLimit(users, 10, function (user, callback) {
                 l.push(user._id)
@@ -94,11 +94,17 @@ function send_timing(user_id, message) {
                 }
             }, function (err) {
                 if (users.length == 50) {
-                    UserModel.update({_id: {$in: l}}, {$set: {send_time: Date.now()}}, {multi: true, upsert: true}, function () {
+                    UserModel.update({_id: {$in: l}}, {$set: {send_time: Date.now()}}, {
+                        multi: true,
+                        upsert: true
+                    }, function () {
                     })
                     send_timing(users[49]._id, message);
-                }else{
-                    UserModel.update({_id: {$in: l}}, {$set: {send_time: Date.now()}}, {multi: true, upsert: true}, function () {
+                } else {
+                    UserModel.update({_id: {$in: l}}, {$set: {send_time: Date.now()}}, {
+                        multi: true,
+                        upsert: true
+                    }, function () {
                     })
                 }
             })
