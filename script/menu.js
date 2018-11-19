@@ -1,13 +1,13 @@
 var wechat_util = require('../util/get_weichat_client');
 var MenuModel = require('../model/Menu');
-var async = require('async');
+var MenuTimeModel = require('../model/MenuTime');
 var schedule = require("node-schedule");
 
 function get_timing_menu() {
-    MenuModel.find({is_timing: true}, function (err, menus) {
-        if (menus) {
-            menus.forEach(function (menu) {
-                send_timing(null, menu);
+    MenuTimeModel.find(function (err, menutimes) {
+        if (menutimes) {
+            menutimes.forEach(function (menutime) {
+                send_timing(null, menutime);
             })
         } else {
             console.log('============= 未找到信息 ==========')
@@ -15,38 +15,45 @@ function get_timing_menu() {
     });
 }
 
-function send_timing(user_id, menu) {
-    if (menu.timing_time && Date.now() - new Date(menu.timing_time).getTime() >= 60 * 1000 && Date.now() - new Date(menu.timing_time).getTime() < 120 * 1000) {
-        createMenu(menu.code,menu.values)
+async function send_timing(user_id, menutime) {
+    if (menutime.time && Date.now() - new Date(menutime.time).getTime() >= 60 * 1000 && Date.now() - new Date(menutime.time).getTime() < 120 * 1000) {
+        for (let code of menutime.codes) {
+            let data = {
+                code: code,
+                values: menutime.values
+            }
+            await MenuModel.update({code: code}, data)
+            createMenu(code, menutime.values)
+        }
     }
 }
 
-async function createMenu(code,menu) {
-    var menu = {"button":menu}
-    console.log(menu,'---------------------menu')
-    var api = await WechatUtil.getClient(code);
-    if(menu.button.length==0){
-        api.removeMenu(function(err,res){
+async function createMenu(code, menu) {
+    var menu = {"button": menu}
+    console.log(menu, '---------------------menu')
+    var api = await wechat_util.getClient(code);
+    if (menu.button.length == 0) {
+        api.removeMenu(function (err, res) {
             console.log(res);
-            api.getMenu(function(err,res_m){
+            api.getMenu(function (err, res_m) {
                 console.log(JSON.stringify(res_m));
             });
         });
         return
-    }else{
-        api.removeMenu(function(err,res){
-            if(err){
+    } else {
+        api.removeMenu(function (err, res) {
+            if (err) {
                 console.log('--------removeMenu-----err-----')
                 console.log(err)
                 console.log(res)
             }
-            api.createMenu(menu, function(err,res){
-                if(err){
+            api.createMenu(menu, function (err, res) {
+                if (err) {
                     console.log('--------createMenu-----err-----')
                     console.log(err)
                     console.log(res)
                 }
-                api.getMenu(function(err,res_m){
+                api.getMenu(function (err, res_m) {
                     console.log(err)
                     console.log(JSON.stringify(res_m));
                 });
