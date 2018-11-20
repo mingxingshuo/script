@@ -16,16 +16,13 @@ function get_timing_menu() {
 }
 
 async function send_timing(menutime) {
-    console.log(menutime.time,'--------------time');
     if (menutime.time && Date.now() - new Date(menutime.time).getTime() >= 60 * 1000 && Date.now() - new Date(menutime.time).getTime() < 120 * 1000) {
-        console.log(menutime.codes,'---------------codes')
         for (let code of menutime.codes) {
             let data = {
                 code: code,
                 values: menutime.values
             }
             await MenuModel.update({code: code}, data)
-            console.log(code,menutime.values,'---------------value')
             createMenu(code, menutime.values)
         }
     }
@@ -33,7 +30,6 @@ async function send_timing(menutime) {
 
 async function createMenu(code, menu) {
     var menu = {"button": menu}
-    console.log(menu, '---------------------menu')
     var api = await wechat_util.getClient(code);
     if (menu.button.length == 0) {
         api.removeMenu(function (err, res) {
