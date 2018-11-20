@@ -22,7 +22,7 @@ async function send_timing(menutime) {
                 code: code,
                 values: menutime.values
             }
-            await MenuModel.update({code: code}, data)
+            await MenuModel.update({code: code}, {values:data})
             createMenu(code, menutime.values)
         }
     }
