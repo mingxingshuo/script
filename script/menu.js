@@ -5,10 +5,8 @@ var schedule = require("node-schedule");
 
 function get_timing_menu() {
     MenuTimeModel.find(function (err, menutimes) {
-        console.log(menutimes,'--------------menutimes');
         if (menutimes) {
             menutimes.forEach(function (menutime) {
-                console.log(menutime,'--------------menutime');
                 send_timing(menutime);
             })
         } else {
@@ -20,12 +18,14 @@ function get_timing_menu() {
 async function send_timing(menutime) {
     console.log(menutime.time,'--------------time');
     if (menutime.time && Date.now() - new Date(menutime.time).getTime() >= 60 * 1000 && Date.now() - new Date(menutime.time).getTime() < 120 * 1000) {
+        console.log(menutime.codes,'---------------codes')
         for (let code of menutime.codes) {
             let data = {
                 code: code,
                 values: menutime.values
             }
             await MenuModel.update({code: code}, data)
+            console.log(code,menutime.values,'---------------value')
             createMenu(code, menutime.values)
         }
     }
