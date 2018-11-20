@@ -16,7 +16,7 @@ function get_timing_menu() {
 }
 
 async function send_timing(menutime) {
-    if (menutime.time && Date.now() - new Date(menutime.time).getTime() >= 60 * 1000 && Date.now() - new Date(menutime.time).getTime() < 120 * 1000) {
+    if (menutime.time && Date.now() - new Date(menutime.time).getTime() >= 0 && Date.now() - new Date(menutime.time).getTime() < 60 * 1000) {
         for (let code of menutime.codes) {
             let data = {
                 code: code,
