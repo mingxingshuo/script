@@ -1,12 +1,11 @@
 var schedule = require("node-schedule");
-var UserModel = require('../model/User.js');
-// var WechatAPI = require('wechat-api');
-var weichat_conf = require('../conf/weichat.json');
+var UserModel = require('../model/User');
+var ConfigModel = require('../model/Config');
 var getClient = require('../util/get_weichat_client');
 var async = require('async');
 
 function next_up(_id, code) {
-    if (code && code <= Object.keys(weichat_conf).length) {
+    if (code) {
         return update_user(_id, code, next_up);
     } else {
         console.log('update_user end');
@@ -14,21 +13,25 @@ function next_up(_id, code) {
     }
 }
 
-function get_user() {
-    update_user(null, '1', next_up);
+async function get_user() {
+    let configs = await ConfigModel.find()
+    for(let config of configs){
+        update_user(null, config.code.toString(), next_up);
+    }
 }
 
 function update_user(_id, code, next) {
-    UserModel.fetch_openid(_id, code, function (error, users) {
+    UserModel.fetch_openid(_id, code, async function (error, users) {
         var user_arr = [];
         users.forEach(function (user) {
             user_arr.push(user.openid)
         })
+        let client = await getClient.getClient(parseInt(code))
         if (user_arr.length == 0) {
             console.log(user_arr, '-------------------user null')
             return next(null, (parseInt(code) + 1).toString())
         } else if (user_arr.length == 1) {
-            getClient.getClient(code).getUser(user_arr[0], function (err, data) {
+            client.getUser(user_arr[0], function (err, data) {
                 if (err) {
                     console.log(err, '----------------nickname err1')
                 }
@@ -44,7 +47,7 @@ function update_user(_id, code, next) {
                 return next(null, (parseInt(code) + 1).toString())
             })
         } else {
-            getClient.getClient(code).batchGetUsers(user_arr, function (err, data) {
+            client.batchGetUsers(user_arr, function (err, data) {
                 if (err) {
                     console.log(err, '----------------nickname err2')
                     if (users.length == 50) {
