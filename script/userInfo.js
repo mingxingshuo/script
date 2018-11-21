@@ -15,6 +15,7 @@ function next_up(_id, code) {
 
 async function get_user() {
     let configs = await ConfigModel.find()
+    console.log(configs,'--------------configs')
     for(let config of configs){
         update_user(null, config.code.toString(), next_up);
     }
