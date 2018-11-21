@@ -89,7 +89,7 @@ function update_user(_id, code, next) {
     })
 }
 
-get_user();
+// get_user();
 
 var rule = new schedule.RecurrenceRule();
 var times = [1];
