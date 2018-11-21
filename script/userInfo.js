@@ -53,7 +53,7 @@ function update_user(_id, code, next) {
                     if (users.length == 50) {
                         return next(users[49]._id, code);
                     } else {
-                        return next(null, (parseInt(code) + 1).toString())
+                        // return next(null, (parseInt(code) + 1).toString())
                     }
                 }
                 if (data && data.user_info_list) {
@@ -79,7 +79,7 @@ function update_user(_id, code, next) {
                         if (users.length == 50) {
                             return next(users[49]._id, code);
                         } else {
-                            return next(null, (parseInt(code) + 1).toString())
+                            // return next(null, (parseInt(code) + 1).toString())
                         }
                     })
                 }
