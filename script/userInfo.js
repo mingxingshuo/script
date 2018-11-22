@@ -19,7 +19,7 @@ async function get_user() {
     for (let config of configs) {
         let updateUser = await mem.get("updateUser_" + config.code);
         if(!updateUser){
-            update_user(null, config.code.toString(), next_up);
+            update_user(null, config.code, next_up);
         }
     }
 }
@@ -31,10 +31,10 @@ async function update_user(_id, code, next) {
         users.forEach(function (user) {
             user_arr.push(user.openid)
         })
-        let client = await getClient.getClient(parseInt(code))
+        let client = await getClient.getClient(code)
         if (user_arr.length == 0) {
             console.log(user_arr, '-------------------user null')
-            return next(null, (parseInt(code) + 1).toString())
+            return next(null, null)
         } else if (user_arr.length == 1) {
             client.getUser(user_arr[0], function (err, data) {
                 if (err) {
@@ -50,7 +50,7 @@ async function update_user(_id, code, next) {
                         console.log(err)
                     }
                 });
-                return next(null, (parseInt(code) + 1).toString())
+                return next(null, null)
             })
         } else {
             client.batchGetUsers(user_arr, async function (err, data) {
@@ -60,7 +60,7 @@ async function update_user(_id, code, next) {
                         return next(users[49]._id, code);
                     } else {
                         await mem.set("updateUser_" + code, 0, 30 * 24 * 3600)
-                        // return next(null, (parseInt(code) + 1).toString())
+                        return next(null, null)
                     }
                 }
                 if (data && data.user_info_list) {
@@ -88,7 +88,7 @@ async function update_user(_id, code, next) {
                             return next(users[49]._id, code);
                         } else {
                             await mem.set("updateUser_" + code, 0, 30 * 24 * 3600)
-                            // return next(null, (parseInt(code) + 1).toString())
+                            return next(null, null)
                         }
                     })
                 }
