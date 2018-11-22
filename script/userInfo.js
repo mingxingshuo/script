@@ -1,5 +1,5 @@
 var schedule = require("node-schedule");
-var UserconfModel = require('../model/UserconfModel');
+var UserconfModel = require('../model/Userconf');
 var ConfigModel = require('../model/Config');
 var getClient = require('../util/get_weichat_client');
 var async = require('async');
