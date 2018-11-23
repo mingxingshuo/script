@@ -16,12 +16,13 @@ function next_up(_id, code) {
 
 async function get_user() {
     let configs = await ConfigModel.find({status: 1})
-    console.log(configs,'-----------------configs')
     for (let config of configs) {
         let updateUser = await mem.get("updateUser_" + config.code);
+        console.log(updateUser,'---------------------updateUser')
         if(!updateUser){
             update_user(null, config.code, next_up);
         }
+        update_user(null, config.code, next_up);
     }
 }
 
