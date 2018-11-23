@@ -22,7 +22,6 @@ async function get_user() {
         if(!updateUser){
             update_user(null, config.code, next_up);
         }
-        update_user(null, config.code, next_up);
     }
 }
 
