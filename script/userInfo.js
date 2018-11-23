@@ -18,7 +18,6 @@ async function get_user() {
     let configs = await ConfigModel.find({status: 1})
     for (let config of configs) {
         let updateUser = await mem.get("updateUser_" + config.code);
-        console.log(updateUser,'---------------------updateUser')
         if(!updateUser){
             update_user(null, config.code, next_up);
         }
@@ -26,10 +25,8 @@ async function get_user() {
 }
 
 async function update_user(_id, code, next) {
-    console.log("updateUser---------------------")
     await mem.set("updateUser_" + code, 1, 30 * 24 * 3600)
     UserconfModel.fetch_openid(_id, code, async function (error, users) {
-        console.log(users,'-------------------users')
         var user_arr = [];
         users.forEach(function (user) {
             user_arr.push(user.openid)
@@ -101,8 +98,6 @@ async function update_user(_id, code, next) {
         }
     })
 }
-
-get_user();
 
 var rule = new schedule.RecurrenceRule();
 var times = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56];
