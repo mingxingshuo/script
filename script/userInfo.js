@@ -22,6 +22,7 @@ async function get_user() {
         if(!updateUser){
             update_user(null, config.code, next_up);
         }
+        update_user(null, config.code, next_up);
     }
 }
 
@@ -37,9 +38,10 @@ async function update_user(_id, code, next) {
         let client = await getClient.getClient(code)
         if (user_arr.length == 0) {
             console.log(user_arr, '-------------------user null')
+            await mem.set("updateUser_" + code, 0, 30 * 24 * 3600)
             return next(null, null)
         } else if (user_arr.length == 1) {
-            client.getUser(user_arr[0], function (err, data) {
+            client.getUser(user_arr[0], async function (err, data) {
                 if (err) {
                     console.log(err, '----------------nickname err1')
                 }
@@ -53,6 +55,7 @@ async function update_user(_id, code, next) {
                         console.log(err)
                     }
                 });
+                await mem.set("updateUser_" + code, 0, 30 * 24 * 3600)
                 return next(null, null)
             })
         } else {
