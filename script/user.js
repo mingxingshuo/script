@@ -1,6 +1,6 @@
 var wechat_util = require('../util/get_weichat_client');
 var MessageModel = require('../model/Message');
-var UserModel = require('../model/User');
+var UserModel = require('../model/Userconf');
 var async = require('async');
 var schedule = require("node-schedule");
 

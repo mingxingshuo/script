@@ -2,7 +2,7 @@
 // var weichat_conf = require('../conf/weichat.json');
 var schedule = require("node-schedule");
 var pro_conf = require('../conf/proj.json');
-var UserModel = require('../model/User.js');
+var UserModel = require('../model/Userconf.js');
 var UserWaitMessageModel = require('../model/UserWaitMessage.js');
 var async = require('async');
 var send_codes = require('../conf/proj.json').send_wechat;

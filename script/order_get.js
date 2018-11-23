@@ -1,7 +1,7 @@
 var schedule = require("node-schedule");
 var UserOrderModel = require('../model/UserOrder.js');
 var TaobaoOrderModel = require('../model/TaobaoOrder.js');
-var UserModel = require('../model/User.js');
+var UserModel = require('../model/Userconf');
 var AddFreeOrderModel = require('../model/AddFreeOrder.js');
 
 // var WechatAPI = require('wechat-api');
