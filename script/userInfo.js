@@ -4,6 +4,7 @@ var ConfigModel = require('../model/Config');
 var getClient = require('../util/get_weichat_client');
 var async = require('async');
 var mem = require('../util/mem.js');
+var UserTagModel = require('../model/UserTag')
 
 function next_up(_id, code) {
     if (code) {
@@ -18,7 +19,7 @@ async function get_user() {
     let configs = await ConfigModel.find({status: 1})
     for (let config of configs) {
         let updateUser = await mem.get("updateUser_" + config.code);
-        if(!updateUser){
+        if (!updateUser) {
             update_user(null, config.code, next_up);
         }
     }
@@ -36,25 +37,10 @@ async function update_user(_id, code, next) {
             console.log(user_arr, '-------------------user null')
             await mem.set("updateUser_" + code, 0, 30 * 24 * 3600)
             return next(null, null)
-        } else if (user_arr.length == 1) {
-            client.getUser(user_arr[0], async function (err, data) {
-                if (err) {
-                    console.log(err, '----------------nickname err1')
-                }
-                UserconfModel.findOneAndUpdate({openid: data.openid}, {
-                    nickname: data.nickname,
-                    headimgurl: data.headimgurl,
-                    sex: data.sex,
-                    sign: 1
-                }, function (err, result) {
-                    if (err) {
-                        console.log(err)
-                    }
-                });
-                await mem.set("updateUser_" + code, 0, 30 * 24 * 3600)
-                return next(null, null)
-            })
         } else {
+            let arr0 = [] //未知
+            let arr1 = [] //男
+            let arr2 = [] //女
             client.batchGetUsers(user_arr, async function (err, data) {
                 if (err) {
                     console.log(err, '----------------nickname err2')
@@ -77,15 +63,35 @@ async function update_user(_id, code, next) {
                                 if (err) {
                                     console.log(err)
                                 }
-                                callback(null)
+                                if (info.sex == "1") {
+                                    arr1.push(info.openid)
+                                } else if (info.sex == "2") {
+                                    arr2.push(info.openid)
+                                } else {
+                                    arr0.push(info.openid)
+                                }
+                                callback(null, arr0, arr1, arr2)
                             });
                         } else {
-                            callback(null)
+                            arr0.push(info.openid)
+                            callback(null, arr0, arr1, arr2)
                         }
-                    }, async function (error, result) {
+                    }, async function (error, arr0, arr1, arr2) {
                         if (error) {
                             console.log(error, '--------------error')
                         }
+                        let people0 = await UserTagModel.findOne({code:code,name:"未知"})
+                        let people1 = await UserTagModel.findOne({code:code,name:"男"})
+                        let people2 = await UserTagModel.findOne({code:code,name:"女"})
+                        client.membersBatchtagging(people0.id, arr0, function (error, res) {
+                            console.log(res)
+                        })
+                        client.membersBatchtagging(people1.id, arr1, function (error, res) {
+                            console.log(res)
+                        })
+                        client.membersBatchtagging(people2.id, arr2, function (error, res) {
+                            console.log(res)
+                        })
                         if (users.length == 50) {
                             return next(users[49]._id, code);
                         } else {
