@@ -57,15 +57,15 @@ async function update_user(_id, code, next) {
                             UserconfModel.findOneAndUpdate({openid: info.openid}, {
                                 nickname: info.nickname,
                                 headimgurl: info.headimgurl,
-                                sex: info.sex,
+                                sex: info.sex.toString(),
                                 sign: 1
                             }, function (err, result) {
                                 if (err) {
                                     console.log(err)
                                 }
-                                if (info.sex == "1") {
+                                if (info.sex == 1) {
                                     arr1.push(info.openid)
-                                } else if (info.sex == "2") {
+                                } else if (info.sex == 2) {
                                     arr2.push(info.openid)
                                 } else {
                                     arr0.push(info.openid)
