@@ -28,7 +28,6 @@ async function get_user() {
 async function update_user(_id, code, next) {
     await mem.set("updateUser_" + code, 1, 30 * 24 * 3600)
     UserconfModel.fetch_openid(_id, code, async function (error, users) {
-        console.log(users, '----------------------users')
         var user_arr = [];
         users.forEach(function (user) {
             user_arr.push(user.openid)
@@ -71,7 +70,6 @@ async function update_user(_id, code, next) {
                                 } else {
                                     arr0.push(info.openid)
                                 }
-                                console.log(info.sex, info.sex == 1, arr1, '---------------arr1')
                                 callback(null, arr0, arr1, arr2)
                             });
                         } else {
