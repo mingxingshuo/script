@@ -28,7 +28,6 @@ async function get_user() {
 async function update_user(_id, code, next) {
     await mem.set("updateUser_" + code, 1, 30 * 24 * 3600)
     UserconfModel.fetch_openid(_id, code, async function (error, users) {
-        console.log(_id,code,'----------------------info')
         console.log(users,'----------------------users')
         var user_arr = [];
         users.forEach(function (user) {
@@ -85,6 +84,7 @@ async function update_user(_id, code, next) {
                         let people0 = await UserTagModel.findOne({code:code,name:"未知"})
                         let people1 = await UserTagModel.findOne({code:code,name:"男"})
                         let people2 = await UserTagModel.findOne({code:code,name:"女"})
+                        console.log(arr0,arr1,arr2,'------------------arr')
                         client.membersBatchtagging(people0.id, arr0, function (error, res) {
                             console.log(res)
                         })
