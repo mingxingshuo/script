@@ -74,12 +74,12 @@ UserconfSchema.statics = {
     },
     fetch_openid(id, code, cb){
         if (id) {
-            return this.find({_id: {$lt: id}, code: code, sign: {$ne:1}}, ['openid'])
+            return this.find({_id: {$lt: id}, code: code, sign: {$ne:1}})
                 .limit(50)
                 .sort({'_id': -1})
                 .exec(cb);
         } else {
-            return this.find({code: code, sign: {$ne:1}}, ['openid'])
+            return this.find({code: code, sign: {$ne:1}})
                 .limit(50)
                 .sort({'_id': -1})
                 .exec(cb);
