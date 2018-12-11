@@ -116,7 +116,7 @@ var rule = new schedule.RecurrenceRule();
 var times = [1];
 rule.second = times;
 var j = schedule.scheduleJob(rule, function () {
-    console.log('scheduleCronstyle:' + new Date());
+    // console.log('scheduleCronstyle:' + new Date());
     get_message()
     get_timing_message()
 });
