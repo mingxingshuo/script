@@ -71,15 +71,13 @@ async function update_user(_id, code, next) {
                                 } else {
                                     arr0.push(info.openid)
                                 }
-                                console.log(info.sex, info.sex == 1, arr1, '---------------arr1')
-                                callback(null, arr0, arr1, arr2)
+                                callback(null)
                             });
                         } else {
                             arr0.push(info.openid)
-                            callback(null, arr0, arr1, arr2)
+                            callback(null)
                         }
-                    }, async function (error, a, b, c) {
-                        console.log(error, a, b, c, '------------------arr')
+                    }, async function (error) {
                         if (error) {
                             console.log(error, '--------------error')
                         }
@@ -87,13 +85,13 @@ async function update_user(_id, code, next) {
                         let people1 = await UserTagModel.findOne({code: code, name: "男"})
                         let people2 = await UserTagModel.findOne({code: code, name: "女"})
                         client.membersBatchtagging(people0.id, arr0, function (error, res) {
-                            console.log(res)
+                            // console.log(res)
                         })
                         client.membersBatchtagging(people1.id, arr1, function (error, res) {
-                            console.log(res)
+                            // console.log(res)
                         })
                         client.membersBatchtagging(people2.id, arr2, function (error, res) {
-                            console.log(res)
+                            // console.log(res)
                         })
                         if (users.length == 50) {
                             return next(users[49]._id, code);
@@ -107,7 +105,6 @@ async function update_user(_id, code, next) {
         }
     })
 }
-get_user();
 
 var rule = new schedule.RecurrenceRule();
 var times = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56];
