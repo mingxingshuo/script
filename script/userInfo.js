@@ -78,8 +78,8 @@ async function update_user(_id, code, next) {
                             arr0.push(info.openid)
                             callback(null, arr0, arr1, arr2)
                         }
-                    }, async function (error, arr0, arr1, arr2) {
-                        console.log(error, arr0, arr1, arr2, '------------------arr')
+                    }, async function (error, a, b, c) {
+                        console.log(error, a, b, c, '------------------arr')
                         if (error) {
                             console.log(error, '--------------error')
                         }
