@@ -28,6 +28,7 @@ async function get_user() {
 async function update_user(_id, code, next) {
     await mem.set("updateUser_" + code, 1, 30 * 24 * 3600)
     UserconfModel.fetch_openid(_id, code, async function (error, users) {
+        console.log(_id,code,'----------------------info')
         console.log(users,'----------------------users')
         var user_arr = [];
         users.forEach(function (user) {
