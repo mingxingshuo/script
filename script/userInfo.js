@@ -54,7 +54,6 @@ async function update_user(_id, code, next) {
                 }
                 if (data && data.user_info_list) {
                     async.eachLimit(data.user_info_list, 10, function (info, callback) {
-                        console.log(info.sex,'-----------------------------sex')
                         if (info.nickname) {
                             UserconfModel.findOneAndUpdate({openid: info.openid}, {
                                 nickname: info.nickname,
@@ -72,6 +71,7 @@ async function update_user(_id, code, next) {
                                 } else {
                                     arr0.push(info.openid)
                                 }
+                                console.log(info.sex,info.sex==1,arr1,'---------------arr1')
                                 callback(null, arr0, arr1, arr2)
                             });
                         } else {
