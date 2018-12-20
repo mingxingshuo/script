@@ -99,15 +99,21 @@ async function update_user(_id, code, next, cb) {
                         let people0 = await UserTagModel.findOne({code: code, name: "未知"})
                         let people1 = await UserTagModel.findOne({code: code, name: "男"})
                         let people2 = await UserTagModel.findOne({code: code, name: "女"})
-                        client.membersBatchtagging(people0.id, arr0, function (error, res) {
-                            console.log(res)
-                        })
-                        client.membersBatchtagging(people1.id, arr1, function (error, res) {
-                            console.log(res)
-                        })
-                        client.membersBatchtagging(people2.id, arr2, function (error, res) {
-                            console.log(res)
-                        })
+                        if(people0){
+                            client.membersBatchtagging(people0.id, arr0, function (error, res) {
+                                console.log(res)
+                            })
+                        }
+                        if(people1){
+                            client.membersBatchtagging(people1.id, arr1, function (error, res) {
+                                console.log(res)
+                            })
+                        }
+                        if(people2){
+                            client.membersBatchtagging(people2.id, arr2, function (error, res) {
+                                console.log(res)
+                            })
+                        }
                         if (users.length == 50) {
                             return next(users[49]._id, code,cb);
                         } else {
