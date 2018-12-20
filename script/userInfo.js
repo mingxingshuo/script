@@ -6,26 +6,39 @@ var async = require('async');
 var mem = require('../util/mem.js');
 var UserTagModel = require('../model/UserTag')
 
-function next_up(_id, code) {
+function next_up(_id, code,cb) {
     if (code) {
         return update_user(_id, code, next_up);
     } else {
         console.log('update_user end');
+        cb(null)
         return;
     }
 }
 
+
 async function get_user() {
     let configs = await ConfigModel.find({status: 1})
-    for (let config of configs) {
+    /*for (let config of configs) {
         let updateUser = await mem.get("updateUser_" + config.code);
         if (!updateUser) {
             update_user(null, config.code, next_up);
         }
-    }
+    }*/
+    async.eachLimit(config,5,processer,function(error){
+        console.log('------5个任务执行结束---------')
+        console.log(error)
+    })
+
 }
 
-async function update_user(_id, code, next) {
+var processer = function(config){
+    update_user(null,config.code,next_up,function(error, result){
+       return callback(error,result)
+    })
+}
+
+async function update_user(_id, code, next, cb) {
     await mem.set("updateUser_" + code, 1, 30 * 24 * 3600)
     UserconfModel.fetch_openid(_id, code, async function (error, users) {
         var user_arr = [];
@@ -93,10 +106,10 @@ async function update_user(_id, code, next) {
                             console.log(res)
                         })
                         if (users.length == 50) {
-                            return next(users[49]._id, code);
+                            return next(users[49]._id, code,cb);
                         } else {
                             await mem.set("updateUser_" + code, 0, 30 * 24 * 3600)
-                            return next(null, null)
+                            return next(null, null,cb)
                         }
                     })
                 }
