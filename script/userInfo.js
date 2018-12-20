@@ -34,6 +34,7 @@ async function get_user() {
 
 var processer = function(config){
     update_user(null,config.code,next_up,function(error, result){
+       console.log('-----callback byself------')
        return callback(error,result)
     })
 }
@@ -118,10 +119,12 @@ async function update_user(_id, code, next, cb) {
     })
 }
 
-var rule = new schedule.RecurrenceRule();
+/*var rule = new schedule.RecurrenceRule();
 var times = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56];
 rule.minute = times;
 var j = schedule.scheduleJob(rule, function () {
     console.log('更新用户信息');
     get_user();
-});
+});*/
+
+get_user();
