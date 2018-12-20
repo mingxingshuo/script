@@ -25,7 +25,7 @@ async function get_user() {
             update_user(null, config.code, next_up);
         }
     }*/
-    async.eachLimit(config,5,processer,function(error){
+    async.eachLimit(configs,5,processer,function(error){
         console.log('------5个任务执行结束---------')
         console.log(error)
     })
