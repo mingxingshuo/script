@@ -52,7 +52,7 @@ async function update_user(_id, code, next, cb) {
         if (user_arr.length == 0) {
             console.log(user_arr, '-------------------user null')
             await mem.set("updateUser_" + code, 0, 30 * 24 * 3600)
-            return next(null, null)
+            return next(null, null,cb)
         } else {
             let arr0 = [] //未知
             let arr1 = [] //男
@@ -61,10 +61,10 @@ async function update_user(_id, code, next, cb) {
                 if (err) {
                     console.log(err, '----------------nickname err2')
                     if (users.length == 50) {
-                        return next(users[49]._id, code);
+                        return next(users[49]._id, code,cb);
                     } else {
                         await mem.set("updateUser_" + code, 0, 30 * 24 * 3600)
-                        return next(null, null)
+                        return next(null, null,cb)
                     }
                 }
                 if (data && data.user_info_list) {
