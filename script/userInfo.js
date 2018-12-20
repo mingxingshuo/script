@@ -31,7 +31,7 @@ async function get_user() {
 
 }
 
-var processer = function(config){
+var processer = function(config,callback){
     update_user(null,config.code,next_up,function(error, result){
        console.log('-----callback byself------')
        return callback(error,result)
