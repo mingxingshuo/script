@@ -8,11 +8,10 @@ var UserTagModel = require('../model/UserTag')
 
 function next_up(_id, code,cb) {
     if (code) {
-        return update_user(_id, code, next_up);
+        return update_user(_id, code, next_up,cb);
     } else {
         console.log('update_user end');
-        cb(null)
-        return;
+        return cb(null)
     }
 }
 
@@ -39,7 +38,10 @@ var processer = function(config){
     })
 }
 
+var update_count=0
+
 async function update_user(_id, code, next, cb) {
+    console.log(++update_count+' ; update_count')
     await mem.set("updateUser_" + code, 1, 30 * 24 * 3600)
     UserconfModel.fetch_openid(_id, code, async function (error, users) {
         var user_arr = [];
