@@ -10,73 +10,72 @@ var UserTagModel = require('../model/UserTag')
 
 router.get('/', async(req, res, next) => {
     let code = req.query.code
-    console.log(code,'----------------------code')
-    // if (code) {
-    //     await mem.set('access_token' + code, '', 10)
-    //     let client = await wechat_util.getClient(code)
-    //     async.waterfall([
-    //         function (callback) {
-    //             UserTagModel.remove({code: code}, function (err, doc) {
-    //                 client.getTags(function (err, res) {
-    //                     if (res) {
-    //                         console.log(res, '------------------res')
-    //                         for (let i of res.tags) {
-    //                             if (i.name == "明星说男" || i.name == "明星说女" || i.name == "明星说未知") {
-    //                                 client.deleteTag(i.id, function (error, res) {
-    //                                     console.log(res)
-    //                                 })
-    //                             }
-    //                         }
-    //                         callback(null)
-    //                     } else {
-    //                         callback(null)
-    //                     }
-    //                 })
-    //             })
-    //         }, function (callback) {
-    //             UserconfModel.remove({code: code}, function (err, doc) {
-    //                 OpenidModel.remove({code: code}, function (err, doc) {
-    //                     callback(null)
-    //                 })
-    //             })
-    //         }, function (callback) {
-    //             get_users(code, null, function () {
-    //                 callback(null)
-    //             })
-    //         }, function (callback) {
-    //             get_user(null, code, function () {
-    //                 callback(null)
-    //             })
-    //         }, function (callback) {
-    //             client.createTag("明星说未知", async function (err, data) {
-    //                 console.log(data, '---------------------data')
-    //                 await UserTagModel.create({id: data.tag.id, name: "未知", code: code})
-    //                 get_tag(null, code, data.tag.id, '0', function () {
-    //                     callback(null)
-    //                 })
-    //             })
-    //         }, function (callback) {
-    //             client.createTag("明星说男", async function (err, data) {
-    //                 await UserTagModel.create({id: data.tag.id, name: "男", code: code})
-    //                 get_tag(null, code, data.tag.id, '1', function () {
-    //                     callback(null)
-    //                 })
-    //             })
-    //         }, function (callback) {
-    //             client.createTag("明星说女", async function (err, data) {
-    //                 await UserTagModel.create({id: data.tag.id, name: "女", code: code})
-    //                 get_tag(null, code, data.tag.id, '2', function () {
-    //                     callback(null)
-    //                 })
-    //             })
-    //         }], async function (error) {
-    //         await OpenidModel.remove({code: code})
-    //         await mem.set("jieguan_" + code, 1, 30 * 24 * 3600)
-    //         await ConfigModel.update({code: code}, {status: 1})
-    //         console.log('jieguan end')
-    //         return
-    //     })
-    // }
+    if (code) {
+        await mem.set('access_token' + code, '', 10)
+        let client = await wechat_util.getClient(code)
+        async.waterfall([
+            function (callback) {
+                UserTagModel.remove({code: code}, function (err, doc) {
+                    client.getTags(function (err, res) {
+                        if (res) {
+                            console.log(res, '------------------res')
+                            for (let i of res.tags) {
+                                if (i.name == "明星说男" || i.name == "明星说女" || i.name == "明星说未知") {
+                                    client.deleteTag(i.id, function (error, res) {
+                                        console.log(res)
+                                    })
+                                }
+                            }
+                            callback(null)
+                        } else {
+                            callback(null)
+                        }
+                    })
+                })
+            }, function (callback) {
+                UserconfModel.remove({code: code}, function (err, doc) {
+                    OpenidModel.remove({code: code}, function (err, doc) {
+                        callback(null)
+                    })
+                })
+            }, function (callback) {
+                get_users(code, null, function () {
+                    callback(null)
+                })
+            }, function (callback) {
+                get_user(null, code, function () {
+                    callback(null)
+                })
+            }, function (callback) {
+                client.createTag("明星说未知", async function (err, data) {
+                    console.log(data, '---------------------data')
+                    await UserTagModel.create({id: data.tag.id, name: "未知", code: code})
+                    get_tag(null, code, data.tag.id, '0', function () {
+                        callback(null)
+                    })
+                })
+            }, function (callback) {
+                client.createTag("明星说男", async function (err, data) {
+                    await UserTagModel.create({id: data.tag.id, name: "男", code: code})
+                    get_tag(null, code, data.tag.id, '1', function () {
+                        callback(null)
+                    })
+                })
+            }, function (callback) {
+                client.createTag("明星说女", async function (err, data) {
+                    await UserTagModel.create({id: data.tag.id, name: "女", code: code})
+                    get_tag(null, code, data.tag.id, '2', function () {
+                        callback(null)
+                    })
+                })
+            }], async function (error) {
+            await OpenidModel.remove({code: code})
+            await mem.set("jieguan_" + code, 1, 30 * 24 * 3600)
+            await ConfigModel.update({code: code}, {status: 1})
+            console.log('jieguan end')
+            return
+        })
+    }
 })
 
 async function get_users(code, openid, callback) {
