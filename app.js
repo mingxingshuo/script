@@ -3,6 +3,8 @@ var app = express();
 
 var get_users = require('./routes/get_users');
 
+app.use('/get_users', get_users);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -21,6 +23,5 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.use('/get_users', get_users);
 
 module.exports = app;
