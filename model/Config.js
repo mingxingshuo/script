@@ -10,7 +10,8 @@ var ConfigSchema = new Schema({
     appid: String,
     appsecret: String,
     token:String,
-    EncodingAESKey:{type: String, default:"tw4a1yTUv0VJURGNif96ibI4z3oWPJJWpuo2mHTvzLb"}
+    EncodingAESKey:{type: String, default:"tw4a1yTUv0VJURGNif96ibI4z3oWPJJWpuo2mHTvzLb"},
+    status: {type: Number, default: -2}  // -2未接管,-1接管中,1已接管
 });
 
 ConfigSchema.plugin(autoIncrement.plugin, {
