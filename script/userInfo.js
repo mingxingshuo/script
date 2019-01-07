@@ -135,4 +135,4 @@ var j = schedule.scheduleJob(rule, function () {
     get_user();
 });*/
 
-// get_user();
+get_user();
