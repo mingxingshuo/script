@@ -53,7 +53,7 @@ UserconfSchema.statics = {
             code: {$in: codes},
             action_time: {$gt: Date.now() - 48 * 3600 * 1000}
         }
-        if (sex) {
+        if (sex && sex != "all") {
             sql.sex = sex
         }
         if (tagId) {
@@ -74,12 +74,12 @@ UserconfSchema.statics = {
     },
     fetch_openid(id, code, cb){
         if (id) {
-            return this.find({_id: {$lt: id}, code: code, sign: {$ne:1},subscribe_flag:true}, ['openid'])
+            return this.find({_id: {$lt: id}, code: code, sign: {$ne: 1}, subscribe_flag: true}, ['openid'])
                 .limit(50)
                 .sort({'_id': -1})
                 .exec(cb);
         } else {
-            return this.find({code: code, sign: {$ne:1},subscribe_flag:true}, ['openid'])
+            return this.find({code: code, sign: {$ne: 1}, subscribe_flag: true}, ['openid'])
                 .limit(50)
                 .sort({'_id': -1})
                 .exec(cb);
