@@ -18,7 +18,7 @@ var schedule = require("node-schedule");
 // })
 
 function get_message() {
-    MessageModel.find({task: true}, function (err, messages) {
+    MessageModel.find({task: true,timing_time: {$lte: (Date.now() - 60 *1000), $gt: (Date.now() - 120 *1000)}}, function (err, messages) {
         if (messages) {
             messages.forEach(function (message) {
                 send_users(null, message);
@@ -59,7 +59,7 @@ function send_users(user_id, message) {
 }
 
 function get_timing_message() {
-    MessageModel.find({is_timing: true}, function (err, messages) {
+    MessageModel.find({is_timing: true,timing_time: {$lte: (Date.now() - 60 *1000), $gt: (Date.now() - 120 *1000)}}, function (err, messages) {
         if (messages) {
             messages.forEach(function (message) {
                 send_timing(null, message);
