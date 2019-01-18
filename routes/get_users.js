@@ -184,6 +184,9 @@ function update_user(_id, code, next, back) {
                                     nickname: info.nickname,
                                     headimgurl: info.headimgurl,
                                     sex: info.sex.toString(),
+                                    country: info.country,
+                                    city: info.city,
+                                    province: info.province,
                                     sign: 1
                                 })
                             }
