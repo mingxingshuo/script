@@ -49,7 +49,7 @@ UserconfSchema.statics = {
     fetch(id, sex, tagId, codes, pre, last, cb) {
         let sql = {
             subscribe_flag: true,
-            $or: [{send_time: {$lt: Date.now() - 2 * 3600 * 1000}}, {send_time: null}],
+            //$or: [{send_time: {$lt: Date.now() - 2 * 3600 * 1000}}, {send_time: null}],
             code: {$in: codes},
             action_time: {$gt: Date.now() - 48 * 3600 * 1000}
         }
