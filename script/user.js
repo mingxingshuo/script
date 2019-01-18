@@ -19,7 +19,7 @@ var schedule = require("node-schedule");
 
 function get_message() {
     MessageModel.find({task: true,timing_time: {$lte: (Date.now() - 60 *1000), $gt: (Date.now() - 120 *1000)}}, function (err, messages) {
-        if (messages) {
+        if (messages.length) {
             messages.forEach(function (message) {
                 send_users(null, message);
             })
@@ -104,7 +104,7 @@ var rule = new schedule.RecurrenceRule();
 var times = [1];
 rule.second = times;
 var j = schedule.scheduleJob(rule, function () {
-    // console.log('scheduleCronstyle:' + new Date());
+    console.log('--------发送客服消息--------------- :' + new Date());
     get_message()
     get_timing_message()
 });
