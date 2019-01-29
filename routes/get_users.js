@@ -241,14 +241,24 @@ function update_tag(_id, code, tagId, sex, next, back) {
             console.log(user_arr, '-------------------user null')
             next(null, null, null, null, back)
         } else {
-            client.membersBatchtagging(tagId, user_arr, function (error, res) {
+            client.membersBatchtagging(tagId, user_arr, async function (error, res) {
                 console.log(res)
+                if(res.errcode == 45009){
+                    let conf = await ConfigModel.findOne({code: code})
+                    let appid = conf.appid
+                    client.clearQuota(appid, function (err, data) {
+                        console.log(err, data, '------------------------------')
+                        console.log('clearQuota end')
+                        update_tag(users[0]._id, code, tagId, sex)
+                    })
+                }else{
+                    if (users.length == 50) {
+                        next(users[49]._id, code, tagId, sex, back);
+                    } else {
+                        next(null, null, null, null, back)
+                    }
+                }
             })
-            if (users.length == 50) {
-                next(users[49]._id, code, tagId, sex, back);
-            } else {
-                next(null, null, null, null, back)
-            }
         }
     })
 }
