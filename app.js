@@ -2,8 +2,10 @@ var express = require('express');
 var app = express();
 
 var get_users = require('./routes/get_users');
+var get_shouzhan = require('./routes/get_shouzhan');
 
 app.use('/get_users', get_users);
+app.use('/get_shouzhan', get_shouzhan);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
