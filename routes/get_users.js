@@ -71,7 +71,7 @@ router.get('/', async(req, res, next) => {
                 })
             }], async function (error) {
             await OpenidModel.remove({code: code})
-            await mem.set("jieguan_" + code, 1, 30 * 24 * 3600)
+            // await mem.set("jieguan_" + code, 1, 30 * 24 * 3600)
             await ConfigModel.update({code: code}, {status: 1})
             console.log('jieguan end')
             return
