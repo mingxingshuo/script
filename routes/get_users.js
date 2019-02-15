@@ -167,7 +167,7 @@ function update_user(_id, code, next, back) {
         } else {
             client.batchGetUsers(user_arr, function (err, data) {
                 if (err) {
-                    console.log(err, '----------------userinfo err')
+                    // console.log(err, '----------------userinfo err')
                     if (users.length == 100) {
                         next(users[99]._id, code, back);
                     } else {
