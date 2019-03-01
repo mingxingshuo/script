@@ -43,6 +43,10 @@ function send_users(user_id, message) {
                 client.sendText(user.openid, message.contents[0].description, function (error, res) {
                     console.log(error);
                 })
+            } else if (message.type == 2) {
+                client.sendImage(user.openid, message.mediaId, function (error, res) {
+                    console.log(error);
+                })
             }
         }, function (err) {
             if (users.length == 50) {
