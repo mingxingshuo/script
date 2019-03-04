@@ -71,8 +71,8 @@ function get_timing_message() {
 function send_timing(user_id, message) {
     if (user_id || (message.timing_time && Date.now() - new Date(message.timing_time).getTime() >= 60 * 1000 && Date.now() - new Date(message.timing_time).getTime() < 120 * 1000)) {
         UserModel.fetch(user_id, message.sex, message.tagId, message.codes, '', '', function (err, users) {
-            console.log(users,'---------------------users')
             var l = []
+            console.log(message.mediaId,'-----------------mediaId')
             async.eachLimit(users, 10, async function (user) {
                 l.push(user._id)
                 var client = await wechat_util.getClient(user.code);
