@@ -59,7 +59,7 @@ async function update_user(_id, code, next, cb) {
             let arr2 = [] //女
             client.batchGetUsers(user_arr, async function (err, data) {
                 if (err) {
-                    console.log(err, '----------------nickname err2')
+                    console.log(err, '----------------nickname err2',code)
                     if (users.length == 50) {
                         return next(users[49]._id, code,cb);
                     } else {
