@@ -281,7 +281,7 @@ function update_tag(_id, code, tagId, sex, next, back) {
                     }, {upsert: true})
                     return next(null, null, null, null, back)
                 }
-                await UserconfModel.deleteMany(users)
+                await OpenidModel.remove({openid: {$in: user_arr}})
                 await RecordModel.findOneAndUpdate({code: code}, {
                     tag_openid: user_arr[user_arr.length - 1],
                     $inc: {tag_count: user_arr.length}
