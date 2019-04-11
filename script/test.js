@@ -21,15 +21,15 @@ async function test(code) {
     //         }
     //     })
     // })
-    // client.createTag("明星说未知", async function (err, data) {
-    //     client.createTag("明星说男", async function (err, data1) {
-    //         client.createTag("明星说女", async function (err, data2) {
-    //             await UserTagModel.create({id: data.tag.id, name: "未知", code: code})
-    //             await UserTagModel.create({id: data1.tag.id, name: "男", code: code})
-    //             await UserTagModel.create({id: data2.tag.id, name: "女", code: code})
-    //         })
-    //     })
-    // })
+    client.createTag("明星说未知", async function (err, data) {
+        client.createTag("明星说男", async function (err, data1) {
+            client.createTag("明星说女", async function (err, data2) {
+                await UserTagModel.create({id: data.tag.id, name: "未知", code: code, sex: '0'})
+                await UserTagModel.create({id: data1.tag.id, name: "男", code: code, sex: '1'})
+                await UserTagModel.create({id: data2.tag.id, name: "女", code: code, sex: '2'})
+            })
+        })
+    })
 
     client.getTags(function (err, data) {
         console.log(data, '-----------------aaa')

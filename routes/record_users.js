@@ -53,21 +53,21 @@ router.get('/', async(req, res, next) => {
             }, function (callback) {
                 client.createTag("明星说未知", async function (err, data) {
                     console.log(data, '---------------------data')
-                    await UserTagModel.create({id: data.tag.id, name: "未知", code: code})
+                    await UserTagModel.create({id: data.tag.id, name: "未知", code: code, sex: '0'})
                     get_tag(null, code, data.tag.id, '0', function () {
                         callback(null)
                     })
                 })
             }, function (callback) {
                 client.createTag("明星说男", async function (err, data) {
-                    await UserTagModel.create({id: data.tag.id, name: "男", code: code})
+                    await UserTagModel.create({id: data.tag.id, name: "男", code: code, sex: '1'})
                     get_tag(null, code, data.tag.id, '1', function () {
                         callback(null)
                     })
                 })
             }, function (callback) {
                 client.createTag("明星说女", async function (err, data) {
-                    await UserTagModel.create({id: data.tag.id, name: "女", code: code})
+                    await UserTagModel.create({id: data.tag.id, name: "女", code: code, sex: '2'})
                     get_tag(null, code, data.tag.id, '2', function () {
                         callback(null)
                     })
