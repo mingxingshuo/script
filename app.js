@@ -3,9 +3,11 @@ var app = express();
 
 var get_users = require('./routes/get_users');
 var get_shouzhan = require('./routes/get_shouzhan');
+var record_users = require('./routes/record_users');
 
 app.use('/get_users', get_users);
 app.use('/get_shouzhan', get_shouzhan);
+app.use('/record_users', record_users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
