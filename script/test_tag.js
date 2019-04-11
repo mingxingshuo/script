@@ -7,6 +7,7 @@ async function tag() {
     let code = process.argv.slice(2)[0]
     let tags = await UserTagModel.find({code: code})
     for (let tag of tags) {
+        console.log(tag,'------tag')
         get_tag(null, code, tag.tagId, tag.sex)
     }
 }
@@ -41,7 +42,6 @@ function update_tag(_id, code, tagId, sex, next) {
                         tag_openid: user_arr[0],
                         errcode: res.errcode
                     }, {upsert: true})
-                    console.log(code + '---tag--end------')
                     return next(null, null, null, null)
                 }
                 await UserconfModel.remove({openid: {$in: user_arr}})
@@ -52,7 +52,6 @@ function update_tag(_id, code, tagId, sex, next) {
                 if (users.length == 50) {
                     next(users[49]._id, code, tagId, sex);
                 } else {
-                    console.log(code + '---tag--end------')
                     next(null, null, null, null)
                 }
             })
