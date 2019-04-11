@@ -1,6 +1,7 @@
 var OpenidModel = require('../model/Openid');
 var UserconfModel = require('../model/Userconf');
 var wechat_util = require('../util/get_weichat_client.js')
+var async = require('async');
 
 function get_user() {
     let code = process.argv.slice(2)[0]
