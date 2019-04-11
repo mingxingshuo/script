@@ -63,11 +63,13 @@ function update_user(_id, code) {
                                 if (users.length == 100) {
                                     update_user(users[99]._id, code);
                                 } else {
+                                    console.log(code + '-------user---end')
                                     return
                                 }
                             })
                         })
                     } else {
+                        console.log(code + '-------user---end')
                         return
                     }
                 }

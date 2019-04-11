@@ -47,12 +47,12 @@ async function get_users(code, openid) {
                             follow_openid: result.data.openid[result.data.openid.length - 1],
                             $inc: {follow_count: result.count}
                         }, {upsert: true})
-                        console.log('-----------code -------' + code + '---------update--end')
+                        console.log(code + '-------follow---end')
                         return
                     }
                 })
             } else {
-                console.log('not have openid arr-----------code -------' + code + '---------update--end')
+                console.log(code + '-------follow---end')
                 return
             }
         }
