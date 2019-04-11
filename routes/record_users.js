@@ -135,7 +135,7 @@ async function get_users(code, openid, callback) {
         client.getFollowers(async function (err, result) {
             if (err) {
                 get_users(code, openid, callback);
-            }else{
+            } else {
                 if (result.errcode) {
                     console.log('-------getFollowers error-------', err)
                     await RecordModel.findOneAndUpdate({code: code}, {
@@ -227,8 +227,8 @@ function get_user(_id, code, back) {
                                     console.log('------------------------------');
                                     return get_user(_id, code, back);
                                 }
-                                console.log(user_arr,'------------------users')
-                                await OpenidModel.remove(user_arr)
+                                console.log(user_arr, '------------------users')
+                                await OpenidModel.remove({openid: {$in: user_arr}})
                                 await RecordModel.findOneAndUpdate({code: code}, {
                                     user_openid: user_arr[user_arr.length - 1],
                                     $inc: {user_count: user_arr.length}
