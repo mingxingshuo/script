@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 var connect_url = require('../conf/proj.json').mongodb;
 var db = mongoose.createConnection(connect_url);
 
-var OpenidSchema = new Schema({
+var RecordSchema = new Schema({
     code: Number,
     follow_count:{type: Number, default: 0},
     follow_openid: String,
@@ -20,6 +20,6 @@ var OpenidSchema = new Schema({
 });
 
 
-var OpenidModel = db.model('Openid', OpenidSchema);
+var RecordModel = db.model('Record', RecordSchema);
 
-module.exports = OpenidModel;
+module.exports = RecordModel;
