@@ -227,8 +227,6 @@ function get_user(_id, code, back) {
                                     console.log('------------------------------');
                                     return get_user(_id, code, back);
                                 }
-                                console.log(user_arr,'--------------------arr')
-                                console.log(user_arr[user_arr.length - 1],'--------------------arr')
                                 await OpenidModel.remove({openid: {$in: user_arr}})
                                 await RecordModel.findOneAndUpdate({code: code}, {
                                     user_openid: user_arr[user_arr.length - 1],
