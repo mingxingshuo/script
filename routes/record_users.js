@@ -111,7 +111,7 @@ async function get_users(code, openid, callback) {
                         }
                         if (result.next_openid) {
                             await RecordModel.findOneAndUpdate({code: code}, {
-                                follow_openid: next_openid,
+                                follow_openid: result.next_openid,
                                 $inc: {follow_count: result.count}
                             }, {upsert: true})
                             console.log('-----------code -------' + code + '---------update--contitue------')
@@ -158,7 +158,7 @@ async function get_users(code, openid, callback) {
                         }
                         if (result.next_openid) {
                             await RecordModel.findOneAndUpdate({code: code}, {
-                                follow_openid: next_openid,
+                                follow_openid: result.next_openid,
                                 $inc: {follow_count: result.count}
                             }, {upsert: true})
                             console.log('-----------code -------' + code + '---------update--contitue------')
