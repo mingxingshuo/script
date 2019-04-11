@@ -7,7 +7,7 @@ var wechat_util = require('../util/get_weichat_client.js')
 
 async function test(code) {
     // await RecordModel.update({_id:'5caf03cde2e9e277aa62d246'},{follow_openid:'oVWfp5goiCUf1IOidyepPmLyvEq0'})
-    // let client = await wechat_util.getClient(code)
+    let client = await wechat_util.getClient(code)
     // UserTagModel.remove({code: code}, function (err, doc) {
     //     client.getTags(function (err, res) {
     //         console.log(res, '------------------res')
