@@ -156,7 +156,6 @@ async function get_users(code, openid, callback) {
                             console.log('------------------------------');
                             return get_users(code, openid, callback);
                         }
-                        console.log(result.next_openid,result.data.openid,'----------------next')
                         if (result.next_openid) {
                             await RecordModel.findOneAndUpdate({code: code}, {
                                 follow_openid: result.next_openid,
