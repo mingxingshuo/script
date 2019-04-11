@@ -8,7 +8,7 @@ async function tag() {
     let tags = await UserTagModel.find({code: code})
     for (let tag of tags) {
         console.log(tag, '------tag')
-        get_tag(null, code, tag.tagId, tag.sex, function (callback) {
+        get_tag(null, code, tag.tagId, tag.sex, function () {
         })
     }
 }
@@ -31,7 +31,6 @@ function update_tag(_id, code, tagId, sex, next, back) {
         })
         let client = await wechat_util.getClient(code)
         if (user_arr.length == 0) {
-            console.log(user_arr, '-------------------user null')
             return next(null, null, null, null, back)
         } else {
             client.membersBatchtagging(tagId, user_arr, async function (error, res) {
