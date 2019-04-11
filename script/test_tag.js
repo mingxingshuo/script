@@ -17,8 +17,7 @@ async function get_tag(_id, code, tagId, sex) {
     if (code) {
         update_tag(_id, code, tagId, sex, get_tag);
     } else {
-        console.log(sex,' update_tag end');
-        return null
+        console.log('update_tag end');
     }
 }
 
