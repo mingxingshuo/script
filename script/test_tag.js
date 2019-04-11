@@ -1,4 +1,5 @@
-var ConfigModel = require('../model/Config');
+var UserconfModel = require('../model/Userconf');
+var UserTagModel = require('../model/UserTag')
 var wechat_util = require('../util/get_weichat_client.js')
 
 async function tag() {
@@ -41,7 +42,7 @@ function update_tag(_id, code, tagId, sex, next) {
                     }, {upsert: true})
                     return next(null, null, null, null)
                 }
-                await UserconfModel.deleteMany(users)
+                await UserconfModel.remove({openid: {$in: user_arr}})
                 await RecordModel.findOneAndUpdate({code: code}, {
                     tag_openid: user_arr[user_arr.length - 1],
                     $inc: {tag_count: user_arr.length}

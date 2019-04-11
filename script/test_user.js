@@ -1,4 +1,5 @@
-var ConfigModel = require('../model/Config');
+var OpenidModel = require('../model/Openid');
+var UserconfModel = require('../model/Userconf');
 var wechat_util = require('../util/get_weichat_client.js')
 
 function get_user() {
@@ -52,7 +53,7 @@ function update_user(_id, code) {
                                     console.log('------------------------------');
                                     return update_user(_id, code);
                                 }
-                                await OpenidModel.deleteMany(users)
+                                await OpenidModel.remove({openid: {$in: user_arr}})
                                 await RecordModel.findOneAndUpdate({code: code}, {
                                     user_openid: user_arr[user_arr.length - 1],
                                     $inc: {user_count: user_arr.length}
