@@ -1,5 +1,6 @@
 var UserconfModel = require('../model/Userconf');
 var UserTagModel = require('../model/UserTag')
+var RecordModel = require('../model/Record')
 var wechat_util = require('../util/get_weichat_client.js')
 
 async function tag() {
