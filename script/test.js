@@ -8,7 +8,7 @@ var async = require('async');
 
 async function test(code) {
     // await RecordModel.update({_id:'5caf03cde2e9e277aa62d246'},{follow_openid:'oVWfp5goiCUf1IOidyepPmLyvEq0'})
-    // let client = await wechat_util.getClient(code)
+    let client = await wechat_util.getClient(code)
     // async.waterfall([
     //     function (back) {
     //         UserTagModel.remove({code: code}, function (err, doc) {
