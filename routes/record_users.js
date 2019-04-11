@@ -227,7 +227,8 @@ function get_user(_id, code, back) {
                                     console.log('------------------------------');
                                     return get_user(_id, code, back);
                                 }
-                                await OpenidModel.deleteMany(users)
+                                console.log(users,'----------------users')
+                                await OpenidModel.delete(users)
                                 await RecordModel.findOneAndUpdate({code: code}, {
                                     user_openid: user_arr[user_arr.length - 1],
                                     $inc: {user_count: user_arr.length}
