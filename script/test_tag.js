@@ -13,7 +13,7 @@ async function tag() {
 }
 
 async function get_tag(_id, code, tagId, sex) {
-    console.log('----------------aaaaaaa')
+    console.log(code,'----------------code')
     if (code) {
         update_tag(_id, code, tagId, sex, get_tag);
     } else {
@@ -31,7 +31,7 @@ function update_tag(_id, code, tagId, sex, next) {
         let client = await wechat_util.getClient(code)
         if (user_arr.length == 0) {
             console.log(user_arr, '-------------------user null')
-            next(null, null, null, null)
+            return next(null, null, null, null)
         } else {
             client.membersBatchtagging(tagId, user_arr, async function (error, res) {
                 if (error) {
@@ -51,9 +51,9 @@ function update_tag(_id, code, tagId, sex, next) {
                     $inc: {tag_count: user_arr.length}
                 }, {upsert: true})
                 if (users.length == 50) {
-                    next(users[49]._id, code, tagId, sex);
+                    return next(users[49]._id, code, tagId, sex);
                 } else {
-                    next(null, null, null, null)
+                    return next(null, null, null, null)
                 }
             })
         }
