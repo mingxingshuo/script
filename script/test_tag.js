@@ -19,6 +19,7 @@ async function get_tag(_id, code, tagId, sex, back) {
         update_tag(_id, code, tagId, sex, get_tag, back);
     } else {
         console.log('update_tag end');
+        console.log(back,'--------------------back')
         back(null)
     }
 }
