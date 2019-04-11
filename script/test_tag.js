@@ -5,21 +5,20 @@ var wechat_util = require('../util/get_weichat_client.js')
 
 async function tag() {
     let code = process.argv.slice(2)[0]
-    get_tag(null, code, data.tag.id, '0', function () {
-        get_tag(null, code, data.tag.id, '1', function () {
-            get_tag(null, code, data.tag.id, '2', function () {
-            })
-        })
-    })
+    let tags = await UserTagModel.find({code: code})
+    for (let tag of tags) {
+        console.log(tag,'------tag')
+        get_tag(null, code, tag.tagId, tag.sex)
+    }
 }
 
 async function get_tag(_id, code, tagId, sex) {
-    console.log(code, '----------------code')
+    console.log(code,'----------------code')
     if (code) {
         update_tag(_id, code, tagId, sex, get_tag);
     } else {
-        console.log('update_tag end');
-        return null
+        console.log(sex,' update_tag end');
+        return
     }
 }
 
