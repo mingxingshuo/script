@@ -239,16 +239,7 @@ function get_user(_id, code, back) {
                             })
                         })
                     } else {
-                        await OpenidModel.deleteMany(users)
-                        await RecordModel.findOneAndUpdate({code: code}, {
-                            user_openid: user_arr[user_arr.length - 1],
-                            $inc: {user_count: user_arr.length}
-                        }, {upsert: true})
-                        if (users.length == 100) {
-                            get_user(users[99]._id, code, back);
-                        } else {
-                            back(null)
-                        }
+                        back(null)
                     }
                 }
             })

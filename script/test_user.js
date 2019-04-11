@@ -65,16 +65,7 @@ function update_user(_id, code) {
                             })
                         })
                     } else {
-                        await OpenidModel.deleteMany(users)
-                        await RecordModel.findOneAndUpdate({code: code}, {
-                            user_openid: user_arr[user_arr.length - 1],
-                            $inc: {user_count: user_arr.length}
-                        }, {upsert: true})
-                        if (users.length == 100) {
-                            update_user(users[99]._id, code);
-                        } else {
-                            return
-                        }
+                        return
                     }
                 }
             })
