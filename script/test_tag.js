@@ -13,6 +13,7 @@ async function tag() {
 }
 
 async function get_tag(_id, code, tagId, sex) {
+    console.log('----------------aaaaaaa')
     if (code) {
         update_tag(_id, code, tagId, sex, get_tag);
     } else {
