@@ -87,13 +87,13 @@ async function get_users(code, openid, callback) {
     if (openid) {
         client.getFollowers(openid, async function (err, result) {
             if (err) {
-                console.log(err,'---------------error')
+                console.log(err, '---------------error')
             } else {
                 if (result.errcode) {
                     await RecordModel.findOneAndUpdate({code: code}, {
                         code: code,
                         follow_openid: openid,
-                        errcode: result.errcode
+                        follow_errcode: result.errcode
                     }, {upsert: true})
                     return callback(null)
                 }
@@ -126,6 +126,7 @@ async function get_users(code, openid, callback) {
                         }
                     })
                 } else {
+                    await RecordModel.findOneAndUpdate({code: code}, {follow_status: 1})
                     console.log('not have openid arr-----------code -------' + code + '---------update--end')
                     callback(null)
                 }
@@ -134,13 +135,13 @@ async function get_users(code, openid, callback) {
     } else {
         client.getFollowers(async function (err, result) {
             if (err) {
-                console.log(err,'---------------error')
+                console.log(err, '---------------error')
             } else {
                 if (result.errcode) {
                     console.log('-------getFollowers error-------', err)
                     await RecordModel.findOneAndUpdate({code: code}, {
                         code: code,
-                        errcode: result.errcode
+                        follow_errcode: result.errcode
                     }, {upsert: true})
                     return callback(null)
                 }
@@ -173,6 +174,7 @@ async function get_users(code, openid, callback) {
                         }
                     })
                 } else {
+                    await RecordModel.findOneAndUpdate({code: code}, {follow_status: 1})
                     console.log('not have openid arr -----------code -------' + code + '---------update--end')
                     callback(null)
                 }
@@ -189,24 +191,26 @@ function get_user(_id, code, back) {
         })
         let client = await wechat_util.getClient(code)
         if (user_arr.length == 0) {
+            await RecordModel.findOneAndUpdate({code: code}, {user_status: 1})
             console.log(user_arr, '-------------------user null')
             return back(null)
         } else {
             client.batchGetUsers(user_arr, async function (err, data) {
                 if (err) {
-                    console.log(err,'---------------error')
+                    console.log(err, '---------------error')
                 } else {
                     if (data.errcode) {
                         await RecordModel.findOneAndUpdate({code: code}, {
                             code: code,
                             user_openid: user_arr[0],
-                            errcode: data.errcode
+                            user_errcode: data.errcode
                         }, {upsert: true})
+                        await RecordModel.findOneAndUpdate({code: code}, {user_status: 1})
                         return back(null)
                     }
                     if (data && data.user_info_list) {
                         let userArr = []
-                        async.eachLimit(data.user_info_list, 100, function (info, callback) {
+                        async.eachLimit(data.user_info_list, 100, async function (info, callback) {
                             if (info.nickname) {
                                 userArr.push({
                                     code: code,
@@ -214,6 +218,7 @@ function get_user(_id, code, back) {
                                     sex: info.sex.toString()
                                 })
                             }
+                            await RecordModel.findOneAndUpdate({code: code}, {user_status: 1})
                             callback(null)
                         }, function (error) {
                             if (error) {
@@ -234,11 +239,13 @@ function get_user(_id, code, back) {
                                 if (users.length == 100) {
                                     get_user(users[99]._id, code, back);
                                 } else {
+                                    await RecordModel.findOneAndUpdate({code: code}, {user_status: 1})
                                     back(null)
                                 }
                             })
                         })
                     } else {
+                        await RecordModel.findOneAndUpdate({code: code}, {user_status: 1})
                         back(null)
                     }
                 }
@@ -251,6 +258,7 @@ async function get_tag(_id, code, tagId, sex, back) {
     if (code) {
         update_tag(_id, code, tagId, sex, get_tag, back);
     } else {
+        await RecordModel.findOneAndUpdate({code: code}, {tag_status: 1})
         console.log('update_tag end');
         back(null);
     }
@@ -275,7 +283,7 @@ function update_tag(_id, code, tagId, sex, next, back) {
                     await RecordModel.findOneAndUpdate({code: code}, {
                         code: code,
                         tag_openid: user_arr[0],
-                        errcode: res.errcode
+                        tag_errcode: res.errcode
                     }, {upsert: true})
                     return next(null, null, null, null, back)
                 }

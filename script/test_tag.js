@@ -41,7 +41,7 @@ function update_tag(_id, code, tagId, sex, next) {
                     await RecordModel.findOneAndUpdate({code: code}, {
                         code: code,
                         tag_openid: user_arr[0],
-                        errcode: res.errcode
+                        tag_errcode: res.errcode
                     }, {upsert: true})
                     return next(null, null, null, null)
                 }

@@ -19,7 +19,7 @@ async function get_users(code, openid) {
                 await RecordModel.findOneAndUpdate({code: code}, {
                     code: code,
                     follow_openid: openid,
-                    errcode: result.errcode
+                    follow_errcode: result.errcode
                 }, {upsert: true})
                 return
             }

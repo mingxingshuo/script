@@ -28,7 +28,7 @@ function update_user(_id, code) {
                         await RecordModel.findOneAndUpdate({code: code}, {
                             code: code,
                             user_openid: user_arr[0],
-                            errcode: data.errcode
+                            user_errcode: data.errcode
                         }, {upsert: true})
                         return
                     }

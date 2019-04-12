@@ -7,7 +7,7 @@ var RecordSchema = new Schema({
     code: Number,
     follow_count:{type: Number, default: 0},
     follow_openid: String,
-    follow_status:{type: Number, default: 0},//0未开始，1执行中，2执行结束
+    follow_status:{type: Number, default: -2},//-2未开始，-1执行中，1执行结束
     follow_errcode:{type: Number, default: 0},
     user_count:{type: Number, default: 0},
     user_openid: String,
