@@ -8,7 +8,7 @@ async function tag() {
     let tags = await UserTagModel.find({code: code})
     for (let tag of tags) {
         console.log(tag,'------tag')
-        get_tag(null, code, tag.tagId, tag.sex)
+        get_tag(null, code, tag.id, tag.sex)
     }
 }
 
