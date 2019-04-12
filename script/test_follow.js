@@ -13,7 +13,7 @@ async function get_users(code, openid) {
     let client = await wechat_util.getClient(code)
     client.getFollowers(openid, async function (err, result) {
         if (err) {
-            get_users(code, openid);
+            console.log(err,'------------------error')
         } else {
             if (result.errcode) {
                 await RecordModel.findOneAndUpdate({code: code}, {
