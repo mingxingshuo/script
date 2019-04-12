@@ -87,7 +87,7 @@ async function get_users(code, openid, callback) {
     if (openid) {
         client.getFollowers(openid, async function (err, result) {
             if (err) {
-                get_users(code, openid, callback);
+                console.log(err,'---------------error')
             } else {
                 if (result.errcode) {
                     await RecordModel.findOneAndUpdate({code: code}, {
@@ -134,7 +134,7 @@ async function get_users(code, openid, callback) {
     } else {
         client.getFollowers(async function (err, result) {
             if (err) {
-                get_users(code, openid, callback);
+                console.log(err,'---------------error')
             } else {
                 if (result.errcode) {
                     console.log('-------getFollowers error-------', err)
@@ -194,7 +194,7 @@ function get_user(_id, code, back) {
         } else {
             client.batchGetUsers(user_arr, async function (err, data) {
                 if (err) {
-                    get_user(_id, code, back);
+                    console.log(err,'---------------error')
                 } else {
                     if (data.errcode) {
                         await RecordModel.findOneAndUpdate({code: code}, {
@@ -218,7 +218,6 @@ function get_user(_id, code, back) {
                         }, function (error) {
                             if (error) {
                                 console.log(error, '--------------error')
-                                return get_user(_id, code, back);
                             }
                             UserconfModel.insertMany(userArr, async function (error, docs) {
                                 if (error) {
@@ -270,7 +269,7 @@ function update_tag(_id, code, tagId, sex, next, back) {
         } else {
             client.membersBatchtagging(tagId, user_arr, async function (error, res) {
                 if (error) {
-                    return next(_id, code, tagId, sex, back);
+                    console.log(error, '-------------------error')
                 }
                 if (res.errcode) {
                     await RecordModel.findOneAndUpdate({code: code}, {
