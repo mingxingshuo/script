@@ -11,7 +11,7 @@ var UserTagModel = require('../model/UserTag_shouzhan')
 router.get('/', async(req, res, next) => {
     let code = req.query.code
     if (code) {
-        // await mem.set('access_token' + code, '', 10)
+        await mem.set('shouzhan_access_token' + code, '', 10)
         let client = await wechat_util.getClient(code)
         async.waterfall([
             function (callback) {
