@@ -16,7 +16,7 @@ async function getClient(code) {
 	var api = new WechatAPI(config.appid, config.appsecret,
 		function getToken(callback){
 			// console.log('----- getToken ----')
-			memcached.get('access_token'+code,function(err,token){
+			memcached.get('shouzhan_access_token'+code,function(err,token){
 				if(token){
 					callback(null,JSON.parse(token));
 				}else{
@@ -26,7 +26,7 @@ async function getClient(code) {
 		},
 		function saveToken(token,callback){
 			// console.log('----- saveToken ----')
-			memcached.set('access_token'+code,JSON.stringify(token),5*60,callback)
+			memcached.set('shouzhan_access_token'+code,JSON.stringify(token),5*60,callback)
 		});
 	return api;
 }
