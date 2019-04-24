@@ -14,6 +14,7 @@ router.get('/', async(req, res, next) => {
     if (code) {
         await mem.set('access_token' + code, '', 10)
         let client = await wechat_util.getClient(code)
+        let config = await ConfigModel.findOne({code: code})
         async.waterfall([
             function (callback) {
                 UserTagModel.remove({code: code}, function (err, doc) {
@@ -54,22 +55,36 @@ router.get('/', async(req, res, next) => {
                 client.createTag("明星说未知", async function (err, data) {
                     console.log(data, '---------------------data')
                     await UserTagModel.create({id: data.tag.id, name: "未知", code: code, sex: '0'})
-                    get_tag(null, code, data.tag.id, '0', function () {
-                        callback(null)
-                    })
+                    if (config.attribute == 0) {
+                        get_tag(null, code, data.tag.id, '0', function () {
+                            callback(null)
+                        })
+                    }
                 })
             }, function (callback) {
                 client.createTag("明星说男", async function (err, data) {
                     await UserTagModel.create({id: data.tag.id, name: "男", code: code, sex: '1'})
                     get_tag(null, code, data.tag.id, '1', function () {
-                        callback(null)
+                        if (config.attribute == 1) {
+                            get_tag(null, code, data.tag.id, '0', function () {
+                                callback(null)
+                            })
+                        }else{
+                            callback(null)
+                        }
                     })
                 })
             }, function (callback) {
                 client.createTag("明星说女", async function (err, data) {
                     await UserTagModel.create({id: data.tag.id, name: "女", code: code, sex: '2'})
                     get_tag(null, code, data.tag.id, '2', function () {
-                        callback(null)
+                        if (config.attribute == 2) {
+                            get_tag(null, code, data.tag.id, '0', function () {
+                                callback(null)
+                            })
+                        }else{
+                            callback(null)
+                        }
                     })
                 })
             }], async function (error) {
