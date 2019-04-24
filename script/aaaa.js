@@ -8,8 +8,8 @@ var mem = require('../util/mem.js');
 var async = require('async');
 var UserTagModel = require('../model/UserTag')
 
-router.get('/', async(req, res, next) => {
-    let code = req.query.code
+async function a() {
+    let code = process.argv.slice(2)[0]
     if (code) {
         let client = await wechat_util.getClient(code)
         let config = await ConfigModel.findOne({code: code})
@@ -78,7 +78,7 @@ router.get('/', async(req, res, next) => {
             return
         })
     }
-})
+}
 
 async function get_tag(_id, code, tagId, sex, back) {
     if (code) {
@@ -126,4 +126,4 @@ function update_tag(_id, code, tagId, sex, next, back) {
     })
 }
 
-module.exports = router;
+a()
