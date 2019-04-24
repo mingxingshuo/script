@@ -23,7 +23,7 @@ async function a() {
                                 console.log(i, '--------------------i')
                                 if (i.name == "明星说男" || i.name == "明星说女" || i.name == "明星说未知") {
                                     client.deleteTag(i.id, function (error, res) {
-                                        console.log(res)
+                                        console.log(res,'--------------------')
                                     })
                                 }
                             }
