@@ -236,7 +236,7 @@ function get_user(_id, code, back) {
                                 })
                             }
                             await RecordModel.findOneAndUpdate({code: code}, {user_status: 1})
-                            callback(null)
+                            back(null)
                         }, function (error) {
                             if (error) {
                                 console.log(error, '--------------error')
