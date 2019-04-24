@@ -59,6 +59,8 @@ router.get('/', async(req, res, next) => {
                         get_tag(null, code, data.tag.id, '0', function () {
                             callback(null)
                         })
+                    }else{
+                        callback(null)
                     }
                 })
             }, function (callback) {
