@@ -2,18 +2,26 @@ var UserconfModel = require('../model/Userconf');
 var UserTagModel = require('../model/UserTag')
 var RecordModel = require('../model/Record')
 var wechat_util = require('../util/get_weichat_client.js')
+var ConfigModel = require('../model/Config');
 
 async function tag() {
     let code = process.argv.slice(2)[0]
     let tags = await UserTagModel.find({code: code})
+    let config = await ConfigModel.findOne({code: code})
     for (let tag of tags) {
-        console.log(tag,'------tag')
-        get_tag(null, code, tag.id, tag.sex)
+        console.log(tag, '------tag')
+        let sex = tag.sex
+        if (sex == "0" && config.attribute == 1) {
+            sex = "1"
+        } else if (sex == "0" && config.attribute == 2) {
+            sex = "2"
+        }
+        get_tag(null, code, tag.id, sex)
     }
 }
 
 function get_tag(_id, code, tagId, sex) {
-    console.log(code,'----------------code')
+    console.log(code, '----------------code')
     if (code) {
         update_tag(_id, code, tagId, sex, get_tag);
     } else {
@@ -35,7 +43,7 @@ function update_tag(_id, code, tagId, sex, next) {
         } else {
             client.membersBatchtagging(tagId, user_arr, async function (error, res) {
                 if (error) {
-                    console.log(error,'---------------error')
+                    console.log(error, '---------------error')
                 }
                 if (res.errcode) {
                     await RecordModel.findOneAndUpdate({code: code}, {
