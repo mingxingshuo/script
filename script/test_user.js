@@ -62,6 +62,7 @@ function update_user(_id, code) {
                                 }, {upsert: true})
                                 if (users.length == 100) {
                                     update_user(users[99]._id, code);
+                                    console.log(code + '-------user-countinue')
                                 } else {
                                     console.log(code + '-------user---end')
                                     return
