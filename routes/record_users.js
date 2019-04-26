@@ -105,6 +105,7 @@ async function get_users(code, openid, callback) {
         client.getFollowers(openid, async function (err, result) {
             if (err) {
                 console.log(err, '---------------error')
+                return callback(null)
             } else {
                 if (result.errcode) {
                     await RecordModel.findOneAndUpdate({code: code}, {
@@ -153,6 +154,7 @@ async function get_users(code, openid, callback) {
         client.getFollowers(async function (err, result) {
             if (err) {
                 console.log(err, '---------------error')
+                return callback(null)
             } else {
                 if (result.errcode) {
                     console.log('-------getFollowers error-------', err)
