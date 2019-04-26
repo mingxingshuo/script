@@ -132,20 +132,20 @@ async function get_users(code, openid, callback) {
                                 $inc: {follow_count: result.count}
                             }, {upsert: true})
                             console.log('-----------code -------' + code + '---------update--contitue------')
-                            get_users(code, result.next_openid, callback);
+                            return get_users(code, result.next_openid, callback);
                         } else {
                             await RecordModel.findOneAndUpdate({code: code}, {
                                 follow_openid: result.data.openid[result.data.openid.length - 1],
                                 $inc: {follow_count: result.count}
                             }, {upsert: true})
                             console.log('-----------code -------' + code + '---------update--end')
-                            callback(null)
+                            return callback(null)
                         }
                     })
                 } else {
                     await RecordModel.findOneAndUpdate({code: code}, {follow_status: 1})
                     console.log('not have openid arr-----------code -------' + code + '---------update--end')
-                    callback(null)
+                    return callback(null)
                 }
             }
         });

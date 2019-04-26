@@ -11,12 +11,17 @@ async function tag() {
     for (let tag of tags) {
         console.log(tag, '------tag')
         let sex = tag.sex
+        let id = tag.id
         if (sex == "0" && config.attribute == 1) {
+            let tag1 = await UserTagModel.findOne({code: code,sex:'1'})
+            id = tag1.id
             sex = "1"
         } else if (sex == "0" && config.attribute == 2) {
+            let tag2 = await UserTagModel.findOne({code: code,sex:'2'})
+            id = tag2.id
             sex = "2"
         }
-        get_tag(null, code, tag.id, sex)
+        get_tag(null, code, id, sex)
     }
 }
 
