@@ -216,7 +216,7 @@ function get_user(_id, code, back) {
         } else {
             client.batchGetUsers(user_arr, async function (err, data) {
                 if (err) {
-                    console.log(err, '---------------error')
+                    get_user(users[99]._id, code, back);
                 } else {
                     if (data.errcode) {
                         await RecordModel.findOneAndUpdate({code: code}, {
