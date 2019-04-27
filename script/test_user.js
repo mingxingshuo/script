@@ -22,11 +22,6 @@ function update_user(_id, code) {
         } else {
             client.batchGetUsers(user_arr, async function (err, data) {
                 if (err) {
-                    await RecordModel.findOneAndUpdate({code: code}, {
-                        code: code,
-                        user_openid: user_arr[0],
-                        user_errcode: err
-                    }, {upsert: true})
                     console.log(err,'-------------------err')
                     return
                 } else {
