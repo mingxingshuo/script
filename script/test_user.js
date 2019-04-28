@@ -23,7 +23,7 @@ function update_user(_id, code) {
             client.batchGetUsers(user_arr, async function (err, data) {
                 console.log('-----------------aaa-------------')
                 if (err) {
-                    console.log(err,'-------------------err')
+                    console.log(err, '-------------------err')
                     update_user(users[99]._id, code);
                 } else {
                     if (data.errcode) {
@@ -58,7 +58,7 @@ function update_user(_id, code) {
                                     console.log('------------------------------');
                                     return update_user(_id, code);
                                 }
-                                await OpenidModel.remove({openid: {$in: user_arr}})
+                                await OpenidModel.remove({code: code, openid: {$in: user_arr}})
                                 console.log('-----------------ccc-------------')
                                 await RecordModel.findOneAndUpdate({code: code}, {
                                     user_openid: user_arr[user_arr.length - 1],
