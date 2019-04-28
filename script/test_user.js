@@ -59,10 +59,12 @@ function update_user(_id, code) {
                                     return update_user(_id, code);
                                 }
                                 await OpenidModel.remove({openid: {$in: user_arr}})
+                                console.log('-----------------ccc-------------')
                                 await RecordModel.findOneAndUpdate({code: code}, {
                                     user_openid: user_arr[user_arr.length - 1],
                                     $inc: {user_count: user_arr.length}
                                 }, {upsert: true})
+                                console.log('-----------------ddd-------------')
                                 if (users.length == 100) {
                                     update_user(users[99]._id, code);
                                     console.log(code + '-------user-countinue')
