@@ -62,7 +62,9 @@ function update_tag(_id, code, tagId, sex, next) {
                     $inc: {tag_count: user_arr.length}
                 }, {upsert: true})
                 if (users.length == 50) {
-                    return next(users[49]._id, code, tagId, sex);
+                    setTimeout(function () {
+                        return next(users[49]._id, code, tagId, sex);
+                    }, 1 * 1000)
                 } else {
                     return next(null, null, null, null)
                 }
