@@ -15,11 +15,9 @@ async function tag() {
         if (sex == "0" && config.attribute == 1) {
             let tag1 = await UserTagModel.findOne({code: code,sex:'1'})
             id = tag1.id
-            sex = "1"
         } else if (sex == "0" && config.attribute == 2) {
             let tag2 = await UserTagModel.findOne({code: code,sex:'2'})
             id = tag2.id
-            sex = "2"
         }
         get_tag(null, code, id, sex)
     }
