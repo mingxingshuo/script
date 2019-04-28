@@ -96,7 +96,9 @@ async function get_users(code, openid) {
                                 $inc: {follow_count: result.count}
                             }, {upsert: true})
                             console.log('-----------code -------' + code + '---------update--contitue------')
-                            get_users(code, result.next_openid);
+                            setTimeout(function () {
+                                get_users(code, result.next_openid);
+                            }, 60 * 1000)
                         } else {
                             await RecordModel.findOneAndUpdate({code: code}, {
                                 follow_openid: result.data.openid[result.data.openid.length - 1],

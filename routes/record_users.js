@@ -72,7 +72,7 @@ router.get('/', async(req, res, next) => {
                 setTimeout(function () {
                     exec(cmdStr2, function () {
                     })
-                }, 10 * 60 * 1000)
+                }, 5 * 60 * 1000)
                 console.log('-----------running-------------')
             }], async function (error) {
             return
