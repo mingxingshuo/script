@@ -5,6 +5,7 @@ var wechat_util = require('../util/get_weichat_client.js')
 async function users() {
     let code = process.argv.slice(2)[0]
     let record = await RecordModel.findOne({code: code})
+    console.log(record,'-----------------------record')
     if (record) {
         let openid = record.follow_openid
         get_users(code, openid)
