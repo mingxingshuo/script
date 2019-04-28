@@ -59,20 +59,21 @@ router.get('/', async(req, res, next) => {
                     await UserTagModel.create({id: data.tag.id, name: "女", code: code, sex: '2'})
                     callback(null)
                 })
-            },function(callback){
-                let cmdStr = 'nohup node /home/work/tuitui_pro/tuitui_weichat/script/test_follow.js ' + code+' &'
-                let cmdStr1 = 'nohup node /home/work/tuitui_pro/tuitui_weichat/script/test_user.js ' + code+' &'
-                let cmdStr2 = 'nohup node /home/work/tuitui_pro/tuitui_weichat/script/test_tag.js ' + code+' &'
-                exec(cmdStr,function (){
+            }, function (callback) {
+                let cmdStr = 'nohup node /home/work/script/script/test_follow.js ' + code + ' &'
+                let cmdStr1 = 'nohup node /home/work/script/script/test_user.js ' + code + ' &'
+                let cmdStr2 = 'nohup node /home/work/script/script/test_tag.js ' + code + ' &'
+                exec(cmdStr, function () {
                 })
                 setTimeout(function () {
-                    exec(cmdStr1,function (){
+                    exec(cmdStr1, function () {
                     })
-                },10*1000)
+                }, 10 * 1000)
                 setTimeout(function () {
-                    exec(cmdStr2,function (){
+                    exec(cmdStr2, function () {
                     })
-                },10*60*1000)
+                }, 10 * 60 * 1000)
+                console.log('-----------running-------------')
             }], async function (error) {
             return
         })
