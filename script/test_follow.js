@@ -5,7 +5,7 @@ var wechat_util = require('../util/get_weichat_client.js')
 async function users() {
     let code = process.argv.slice(2)[0]
     let record = await RecordModel.findOne({code: code})
-    console.log(record,'-----------------------record')
+    console.log(record, '-----------------------record')
     if (record) {
         let openid = record.follow_openid
         get_users(code, openid)
@@ -47,7 +47,9 @@ async function get_users(code, openid) {
                                 $inc: {follow_count: result.count}
                             }, {upsert: true})
                             console.log('-----------code -------' + code + '---------update--contitue------')
-                            get_users(code, result.next_openid);
+                            setTimeout(function () {
+                                get_users(code, result.next_openid);
+                            }, 60 * 1000)
                         } else {
                             await RecordModel.findOneAndUpdate({code: code}, {
                                 follow_openid: result.data.openid[result.data.openid.length - 1],

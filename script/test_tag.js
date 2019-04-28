@@ -13,10 +13,10 @@ async function tag() {
         let sex = tag.sex
         let id = tag.id
         if (sex == "0" && config.attribute == 1) {
-            let tag1 = await UserTagModel.findOne({code: code,sex:'1'})
+            let tag1 = await UserTagModel.findOne({code: code, sex: '1'})
             id = tag1.id
         } else if (sex == "0" && config.attribute == 2) {
-            let tag2 = await UserTagModel.findOne({code: code,sex:'2'})
+            let tag2 = await UserTagModel.findOne({code: code, sex: '2'})
             id = tag2.id
         }
         get_tag(null, code, id, sex)
@@ -56,7 +56,7 @@ function update_tag(_id, code, tagId, sex, next) {
                     }, {upsert: true})
                     return next(null, null, null, null)
                 }
-                await UserconfModel.remove({openid: {$in: user_arr}})
+                await UserconfModel.remove({code: code, openid: {$in: user_arr}})
                 await RecordModel.findOneAndUpdate({code: code}, {
                     tag_openid: user_arr[user_arr.length - 1],
                     $inc: {tag_count: user_arr.length}

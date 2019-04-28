@@ -21,7 +21,6 @@ function update_user(_id, code) {
             return
         } else {
             client.batchGetUsers(user_arr, async function (err, data) {
-                console.log('-----------------aaa-------------')
                 if (err) {
                     console.log(err, '-------------------err')
                     update_user(users[99]._id, code);
@@ -51,20 +50,19 @@ function update_user(_id, code) {
                                 return update_user(_id, code);
                             }
                             UserconfModel.insertMany(userArr, async function (error, docs) {
-                                console.log('-----------------bbb-------------')
                                 if (error) {
                                     console.log('------insertMany error--------');
                                     console.log(error);
                                     console.log('------------------------------');
                                     return update_user(_id, code);
                                 }
-                                await OpenidModel.remove({code: code, openid: {$in: user_arr}})
-                                console.log('-----------------ccc-------------')
+                                OpenidModel.remove({code: code, openid: {$in: user_arr}},function () {
+                                    
+                                })
                                 await RecordModel.findOneAndUpdate({code: code}, {
                                     user_openid: user_arr[user_arr.length - 1],
                                     $inc: {user_count: user_arr.length}
                                 }, {upsert: true})
-                                console.log('-----------------ddd-------------')
                                 if (users.length == 100) {
                                     update_user(users[99]._id, code);
                                     console.log(code + '-------user-countinue')
