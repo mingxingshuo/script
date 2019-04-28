@@ -63,9 +63,6 @@ router.get('/', async(req, res, next) => {
                 let cmdStr = 'nohup node /home/work/script/script/test_follow.js ' + code + ' &'
                 let cmdStr1 = 'nohup node /home/work/script/script/test_user.js ' + code + ' &'
                 let cmdStr2 = 'nohup node /home/work/script/script/test_tag.js ' + code + ' &'
-                console.log(cmdStr)
-                console.log(cmdStr1)
-                console.log(cmdStr2)
                 exec(cmdStr, function () {
                 })
                 setTimeout(function () {
