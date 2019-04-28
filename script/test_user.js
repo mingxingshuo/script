@@ -21,6 +21,7 @@ function update_user(_id, code) {
             return
         } else {
             client.batchGetUsers(user_arr, async function (err, data) {
+                console.log('-----------------aaa-------------')
                 if (err) {
                     console.log(err,'-------------------err')
                     update_user(users[99]._id, code);
@@ -50,6 +51,7 @@ function update_user(_id, code) {
                                 return update_user(_id, code);
                             }
                             UserconfModel.insertMany(userArr, async function (error, docs) {
+                                console.log('-----------------bbb-------------')
                                 if (error) {
                                     console.log('------insertMany error--------');
                                     console.log(error);
