@@ -47,14 +47,17 @@ router.get('/', async(req, res, next) => {
                 client.createTag("明星说未知", async function (err, data) {
                     console.log(data, '---------------------data')
                     await UserTagModel.create({id: data.tag.id, name: "未知", code: code, sex: '0'})
+                    callback(null)
                 })
             }, function (callback) {
                 client.createTag("明星说男", async function (err, data) {
                     await UserTagModel.create({id: data.tag.id, name: "男", code: code, sex: '1'})
+                    callback(null)
                 })
             }, function (callback) {
                 client.createTag("明星说女", async function (err, data) {
                     await UserTagModel.create({id: data.tag.id, name: "女", code: code, sex: '2'})
+                    callback(null)
                 })
             },function(callback){
                 let cmdStr = 'nohup node /home/work/tuitui_pro/tuitui_weichat/script/test_follow.js ' + code+' &'
