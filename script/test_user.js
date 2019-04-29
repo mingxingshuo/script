@@ -55,8 +55,8 @@ function update_user(_id, code) {
                                     console.log('------------------------------');
                                     return update_user(_id, code);
                                 }
-                                OpenidModel.remove({code: code, openid: {$in: user_arr}},function () {
-                                    
+                                OpenidModel.remove({code: code, openid: {$in: user_arr}}, function () {
+
                                 })
                                 await RecordModel.findOneAndUpdate({code: code}, {
                                     user_openid: user_arr[user_arr.length - 1],
@@ -66,8 +66,8 @@ function update_user(_id, code) {
                                     update_user(users[99]._id, code);
                                     console.log(code + '-------user-countinue')
                                 } else {
+                                    update_user(users[users.length - 1]._id, code);
                                     console.log(code + '-------user---end')
-                                    return
                                 }
                             })
                         })

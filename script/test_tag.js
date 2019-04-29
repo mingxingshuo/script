@@ -66,9 +66,9 @@ function update_tag(_id, code, tagId, sex, next) {
                 if (users.length == 50) {
                     setTimeout(function () {
                         return next(users[49]._id, code, tagId, sex);
-                    }, 0.8 * 1000)
+                    }, 0.85 * 1000)
                 } else {
-                    return next(users[49]._id, code, tagId, sex);
+                    return next(users[users.length - 1]._id, code, tagId, sex);
                 }
             })
         }
