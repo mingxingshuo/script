@@ -55,7 +55,8 @@ function update_tag(_id, code, tagId, sex, next) {
                         tag_openid: user_arr[0],
                         tag_errcode: res.errcode
                     }, {upsert: true})
-                    return next(null, null, null, null)
+                    return next(users[49]._id, code, tagId, sex);
+                    // return next(null, null, null, null)
                 }
                 await UserconfModel.remove({code: code, openid: {$in: user_arr}})
                 await RecordModel.findOneAndUpdate({code: code}, {
