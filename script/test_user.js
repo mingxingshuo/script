@@ -22,7 +22,6 @@ function update_user(_id, code) {
         } else {
             client.batchGetUsers(user_arr, async function (err, data) {
                 if (err) {
-                    console.log(err, '-------------------err')
                     update_user(users[99]._id, code);
                 } else {
                     if (data.errcode) {
@@ -73,8 +72,7 @@ function update_user(_id, code) {
                             })
                         })
                     } else {
-                        console.log(code + '-------user---end')
-                        return
+                        update_user(users[99]._id, code);
                     }
                 }
             })

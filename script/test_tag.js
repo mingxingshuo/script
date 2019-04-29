@@ -67,7 +67,7 @@ function update_tag(_id, code, tagId, sex, next) {
                         return next(users[49]._id, code, tagId, sex);
                     }, 0.8 * 1000)
                 } else {
-                    return next(null, null, null, null)
+                    return next(users[49]._id, code, tagId, sex);
                 }
             })
         }
