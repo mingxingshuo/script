@@ -32,10 +32,10 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 
-// require('../script/send_timing.js');
-// require('../script/user');
+require('../script/send_timing.js');
+require('../script/user');
 // require('../script/userInfo');
-// require('../script/menu');
+require('../script/menu');
 // require('../script/order_get.js');
 // require('../script/baokuan.js');
 // require('../script/url');
