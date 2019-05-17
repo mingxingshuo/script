@@ -60,20 +60,9 @@ router.get('/', async(req, res, next) => {
                     callback(null)
                 })
             }, function (callback) {
-                let cmdStr = 'nohup node /home/work/script/script/test_follow.js ' + code + ' &'
-                let cmdStr1 = 'nohup node /home/work/script/script/test_user.js ' + code + ' &'
-                let cmdStr2 = 'nohup node /home/work/script/script/test_tag.js ' + code + ' &'
+                let cmdStr = 'pm2 start /home/work/dahaoscript/script/jieguan.js ' + code + ' --name ' + code
                 exec(cmdStr, function () {
                 })
-                setTimeout(function () {
-                    exec(cmdStr1, function () {
-                    })
-                }, 10 * 1000)
-                setTimeout(function () {
-                    exec(cmdStr2, function () {
-                    })
-                }, 5 * 60 * 1000)
-                console.log('-----------running-------------')
             }], async function (error) {
             return
         })
