@@ -60,7 +60,7 @@ router.get('/', async(req, res, next) => {
                     callback(null)
                 })
             }, function (callback) {
-                let cmdStr = 'pm2 start /home/work/dahaoscript/script/jieguan.js ' + code + ' --name ' + code
+                let cmdStr = 'code='+code+' pm2 start /home/work/dahaoscript/script/jieguan.js --name ' + code
                 exec(cmdStr, function () {
                 })
             }], async function (error) {
