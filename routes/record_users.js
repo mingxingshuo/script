@@ -44,6 +44,10 @@ router.get('/', async(req, res, next) => {
                     })
                 })
             }, function (callback) {
+                setTimeout(function () {
+                    callback(null)
+                },10*1000)
+            }, function (callback) {
                 client.createTag("明星说未知", async function (err, data) {
                     console.log(data, '---------------------data')
                     await UserTagModel.create({id: data.tag.id, name: "未知", code: code, sex: '0'})
@@ -60,7 +64,7 @@ router.get('/', async(req, res, next) => {
                     callback(null)
                 })
             }, function (callback) {
-                let cmdStr = 'code='+code+' pm2 start /home/work/dahaoscript/script/jieguan.js --name ' + code
+                let cmdStr = 'code=' + code + ' pm2 start /home/work/dahaoscript/script/jieguan.js --name ' + code
                 exec(cmdStr, function () {
                 })
             }], async function (error) {
