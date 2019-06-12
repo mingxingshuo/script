@@ -46,10 +46,10 @@ router.get('/', async(req, res, next) => {
             }, function (callback) {
                 setTimeout(function () {
                     callback(null)
-                },10*1000)
+                }, 10 * 1000)
             }, function (callback) {
                 client.createTag("明星说未知", async function (err, data) {
-                    console.log(data, '---------------------data')
+                    console.log(err, data, '---------------------data')
                     await UserTagModel.create({id: data.tag.id, name: "未知", code: code, sex: '0'})
                     callback(null)
                 })
