@@ -242,9 +242,7 @@ function update_tag(_id, code, tagId, sex, next, back) {
             next(null, null, null, null, back)
         } else {
             client.membersBatchtagging(tagId, user_arr, async function (error, res) {
-                if(error){
-                    update_tags(users[49]._id, code, tagId, sex, back);
-                }
+                console.log(res)
                 if (res) {
                     if (res.errcode == 45009) {
                         let conf = await ConfigModel.findOne({code: code})
