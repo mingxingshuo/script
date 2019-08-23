@@ -1,5 +1,6 @@
 {
 	"mongodb":"mongodb://mingxing:liujiazhi88@dds-2ze36af17eb05c042440-pub.mongodb.rds.aliyuncs.com:3717/mingxingshuo?replicaSet=mgset-5196081",
 	"shouzhan":"mongodb://mingxing:liujiazhi88@dds-2ze36af17eb05c042440-pub.mongodb.rds.aliyuncs.com:3717/shouzhan?replicaSet=mgset-5196081",
+	"another":"mongodb://mingxing:liujiazhi88@dds-2ze36af17eb05c042440-pub.mongodb.rds.aliyuncs.com:3717/another_guest?replicaSet=mgset-5196081",
 	"send_wechat":["2","3"]
 }
